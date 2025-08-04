@@ -1,40 +1,36 @@
 package com.openclassrooms.mddapi.model;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "users")
+@Table(name = "comments")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    @Email
+    @Column(nullable = false, columnDefinition = "TEXT")
     @NotBlank
-    private String email;
-    @Column(unique = true, nullable = false)
-    @NotBlank
-    @Size(min = 3, max = 50)
-    private String username;
+    @Size(min = 1, max = 1000)
+    private String content;
 
-    @Column(nullable = false)
-    @NotBlank
-    @Size(min = 8)
-    private String password;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Column(name = "post_id", nullable = false)
+    private Long postId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -52,4 +48,5 @@ public class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
 }

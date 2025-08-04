@@ -5,36 +5,36 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "users")
+@Table(name = "posts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    @Email
-    @NotBlank
-    private String email;
-    @Column(unique = true, nullable = false)
-    @NotBlank
-    @Size(min = 3, max = 50)
-    private String username;
-
     @Column(nullable = false)
     @NotBlank
-    @Size(min = 8)
-    private String password;
+    @Size(min = 5, max = 200)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    @NotBlank
+    @Size(min = 10)
+    private String content;
+
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Column(name = "topic_id", nullable = false)
+    private Long topicId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
