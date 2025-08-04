@@ -37,5 +37,29 @@ public class UserService {
     }
 
 
+    public UserResponse login(String email, String password) {
+
+        System.out.println("Tentative login avec: " + email + " / " + password);
+
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+
+            System.out.println("Utilisateur introuvable");
+            throw new RuntimeException("User not found");
+        }
+
+        System.out.println("Mot de passe attendu: " + user.get().getPassword());
+
+        if (!user.get().getPassword().equals(password)) {
+
+            System.out.println("Mot de passe invalide");
+            throw new RuntimeException("Invalid password");
+        }
+
+        System.out.println("Connexion réussie");
+        return modelMapper.map(user.get(), UserResponse.class);
+    }
+
+
 
 }
