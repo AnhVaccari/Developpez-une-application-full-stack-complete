@@ -40,7 +40,7 @@ public class SubscriptionService {
 
 
 
-        // Convertir DTO → Entity
+        // Mapping manuel
         System.out.println("=== Création manuelle de l'entity ===");
         Subscription subscription = new Subscription();
         subscription.setUserId(request.getUserId());
@@ -54,7 +54,7 @@ public class SubscriptionService {
         Subscription savedSubscription = subscriptionRepository.save(subscription);
         System.out.println("Saved with ID: " + savedSubscription.getId());
 
-        // Convertir Entity → DTO Response
+        // ModelMapper pour la réponse
         System.out.println("=== Conversion vers Response ===");
         return modelMapper.map(savedSubscription, SubscriptionResponse.class);
     }

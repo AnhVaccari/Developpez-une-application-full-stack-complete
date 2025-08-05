@@ -27,7 +27,7 @@ public class PostService {
     private ModelMapper modelMapper;
 
     public PostResponse createPost(PostRequest request) {
-        // Convertir DTO → Entity
+        // Mapping manuel
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
@@ -37,7 +37,7 @@ public class PostService {
         // Sauvegarder
         Post savedPost = postRepository.save(post);
 
-        // Convertir Entity → DTO Response
+        // ModelMapper pour la réponse
         return modelMapper.map(savedPost, PostResponse.class);
     }
 
