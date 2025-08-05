@@ -25,12 +25,6 @@ public class TopicController {
         return ResponseEntity.ok(topics);
     }
 
-    @GetMapping("/test-endpoint")
-    public String testEndpoint() {
-        System.out.println("=== GET /api/topics/test-endpoint CALLED ===");
-        return "Test endpoint works!";
-    }
-
 
 
 }
