@@ -33,10 +33,23 @@ public class UserController {
     private SubscriptionService subscriptionService;
 
     @PostMapping("/subscribe")
-    public ResponseEntity<?> subscribe(@Valid @RequestBody SubscriptionRequest request) {
-        System.out.println("=== SUBSCRIBE ENDPOINT CALLED ===");
-        System.out.println("UserId: " + request.getUserId() + ", TopicId: " + request.getTopicId());
+    public ResponseEntity<?> subscribe(@Valid @RequestBody SubscriptionRequest request, Authentication authentication) {
+
         try {
+            // Récupérer l'utilisateur connecté
+            String email = authentication.getName();
+            Optional<User> currentUserOpt = userRepository.findByEmail(email);
+            if (currentUserOpt.isEmpty()) {
+                return ResponseEntity.status(401).body("Unauthorized");
+            }
+
+            Long currentUserId = currentUserOpt.get().getId();
+
+            // Vérifier que l'utilisateur s'abonne pour lui-même
+            if (!currentUserId.equals(request.getUserId())) {
+                return ResponseEntity.status(403).body("Forbidden: You can only subscribe for yourself");
+            }
+
             SubscriptionResponse response = subscriptionService.subscribe(request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -45,10 +58,23 @@ public class UserController {
     }
 
     @PostMapping("/unsubscribe")
-    public ResponseEntity<?> unsubscribe(@Valid @RequestBody SubscriptionRequest request) {
-        System.out.println("=== UNSUBSCRIBE ENDPOINT CALLED ===");
-        System.out.println("UserId: " + request.getUserId() + ", TopicId: " + request.getTopicId());
+    public ResponseEntity<?> unsubscribe(@Valid @RequestBody SubscriptionRequest request,
+            Authentication authentication) {
+
         try {
+
+            String email = authentication.getName();
+            Optional<User> currentUserOpt = userRepository.findByEmail(email);
+            if (currentUserOpt.isEmpty()) {
+                return ResponseEntity.status(401).body("Unauthorized");
+            }
+
+            Long currentUserId = currentUserOpt.get().getId();
+
+            if (!currentUserId.equals(request.getUserId())) {
+                return ResponseEntity.status(403).body("Forbidden: You can only unsubscribe for yourself");
+            }
+
             subscriptionService.unsubscribe(request.getUserId(), request.getTopicId());
             return ResponseEntity.ok("Unsubscribed successfully");
         } catch (RuntimeException e) {
@@ -57,8 +83,20 @@ public class UserController {
     }
 
     @GetMapping("/profile/{userId}")
-    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userId, Authentication authentication) {
         try {
+            String email = authentication.getName();
+            Optional<User> currentUserOpt = userRepository.findByEmail(email);
+            if (currentUserOpt.isEmpty()) {
+                return ResponseEntity.status(401).body("Unauthorized");
+            }
+
+            Long currentUserId = currentUserOpt.get().getId();
+
+            if (!currentUserId.equals(userId)) {
+                return ResponseEntity.status(403).body("Forbidden: You can only view your own profile");
+            }
+
             UserProfileResponse profile = userService.getUserProfile(userId);
             return ResponseEntity.ok(profile);
         } catch (RuntimeException e) {
@@ -68,8 +106,23 @@ public class UserController {
 
     @PutMapping("/profile/{userId}")
     public ResponseEntity<?> updateProfile(@PathVariable Long userId,
-            @Valid @RequestBody UpdateProfileRequest request) {
+            @Valid @RequestBody UpdateProfileRequest request,
+            Authentication authentication) {
         try {
+            // Récupérer l'utilisateur connecté depuis le JWT
+            String email = authentication.getName();
+            Optional<User> currentUserOpt = userRepository.findByEmail(email);
+            if (currentUserOpt.isEmpty()) {
+                return ResponseEntity.status(401).body("Unauthorized");
+            }
+
+            Long currentUserId = currentUserOpt.get().getId();
+
+            // Vérifier que l'utilisateur ne peut modifier que son propre profil
+            if (!currentUserId.equals(userId)) {
+                return ResponseEntity.status(403).body("Forbidden: You can only modify your own profile");
+            }
+
             UserResponse response = userService.updateProfile(userId, request);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -78,7 +131,7 @@ public class UserController {
     }
 
     @GetMapping("/subscriptions/{userId}")
-    public ResponseEntity<?> getUserSubscriptions(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserSubscriptions(@PathVariable Long userId, Authentication authentication) {
         try {
             UserProfileResponse profile = userService.getUserProfile(userId);
             return ResponseEntity.ok(profile.getSubscriptions());

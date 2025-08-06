@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +11,11 @@ import com.openclassrooms.mddapi.dto.PostRequest;
 import com.openclassrooms.mddapi.dto.PostResponse;
 import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.model.Subscription;
+import com.openclassrooms.mddapi.model.Topic;
+import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.PostRepository;
 import com.openclassrooms.mddapi.repository.SubscriptionRepository;
+import com.openclassrooms.mddapi.repository.TopicRepository;
 
 @Service
 public class PostService {
@@ -22,17 +26,21 @@ public class PostService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
+    @Autowired
+    private TopicRepository topicRepository;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public PostResponse createPost(PostRequest request) {
-        // Mapping manuel
+    public PostResponse createPost(PostRequest request, User user) {
+        Topic topic = topicRepository.findById(request.getTopicId())
+                .orElseThrow(() -> new RuntimeException("Topic not found"));
+
         Post post = new Post();
         post.setTitle(request.getTitle());
         post.setContent(request.getContent());
-        post.setUserId(request.getUserId());
-        post.setTopicId(request.getTopicId());
+        post.setUser(user); // L’utilisateur connecté
+        post.setTopic(topic);
 
         // Sauvegarder
         Post savedPost = postRepository.save(post);
@@ -48,13 +56,10 @@ public class PostService {
         List<Subscription> subscriptions = subscriptionRepository.findByUserId(userId);
         System.out.println("Subscriptions found: " + subscriptions.size());
 
-
         List<Long> topicIds = subscriptions.stream()
                 .map(Subscription::getTopicId)
                 .collect(Collectors.toList());
         System.out.println("Topic IDs: " + topicIds);
-
-
 
         if (topicIds.isEmpty()) {
             System.out.println("No subscriptions, returning empty feed");

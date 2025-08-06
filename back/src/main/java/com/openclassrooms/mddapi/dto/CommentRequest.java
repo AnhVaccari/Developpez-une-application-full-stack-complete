@@ -8,15 +8,11 @@ import lombok.Data;
 @Data
 public class CommentRequest {
 
-
     @NotBlank
     @Size(min = 5, max = 1000)
     private String content;
 
-    private Long postId;
-
     @NotNull
-    private Long userId;
-
+    private Long postId;
 
 }

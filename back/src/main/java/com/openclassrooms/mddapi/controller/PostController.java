@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,9 @@ import com.openclassrooms.mddapi.dto.PostRequest;
 import com.openclassrooms.mddapi.dto.PostResponse;
 import com.openclassrooms.mddapi.dto.PostWithCommentsResponse;
 import com.openclassrooms.mddapi.model.Post;
+import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.PostRepository;
+import com.openclassrooms.mddapi.repository.UserRepository;
 import com.openclassrooms.mddapi.service.CommentService;
 import com.openclassrooms.mddapi.service.PostService;
 
@@ -40,15 +43,25 @@ public class PostController {
     private PostRepository postRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request) {
+    public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request, Authentication authentication) {
         try {
-            PostResponse response = postService.createPost(request);
+            // Récupération de l'utilisateur connecté
+            String email = authentication.getName();
+            User currentUser = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found !"));
+
+            // Appel du service en lui passant l'utilisateur connecté
+            PostResponse response = postService.createPost(request, currentUser);
+
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Erreur : " + e.getMessage());
         }
     }
 
@@ -62,11 +75,17 @@ public class PostController {
 
     @PostMapping("/{postId}/comments")
     public ResponseEntity<?> addComment(@PathVariable Long postId,
-            @Valid @RequestBody CommentRequest request) {
+            @Valid @RequestBody CommentRequest request, Authentication authentication) {
         try {
-            // S'assurer que le postId correspond
-            request.setPostId(postId);
-            CommentResponse response = commentService.createComment(request);
+            // Récupérer l'utilisateur connecté
+            String email = authentication.getName();
+            User currentUser = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found !"));
+
+            request.setPostId(postId); // on injecte le postId
+
+            CommentResponse response = commentService.createComment(request, currentUser); // on passe l'user
+
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());

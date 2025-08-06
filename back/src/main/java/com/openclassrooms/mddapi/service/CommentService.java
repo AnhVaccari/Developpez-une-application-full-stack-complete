@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.dto.CommentRequest;
 import com.openclassrooms.mddapi.dto.CommentResponse;
 import com.openclassrooms.mddapi.model.Comment;
+import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.CommentRepository;
+import com.openclassrooms.mddapi.repository.PostRepository;
 
 @Service
 public class CommentService {
@@ -17,14 +19,18 @@ public class CommentService {
     private CommentRepository commentRepository;
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
-    public CommentResponse createComment(CommentRequest request) {
+    public CommentResponse createComment(CommentRequest request, User user) {
         // Mapping manuel
         Comment comment = new Comment();
         comment.setContent(request.getContent());
-        comment.setUserId(request.getUserId());
-        comment.setPostId(request.getPostId());
+        comment.setPost(postRepository.findById(request.getPostId())
+                .orElseThrow(() -> new RuntimeException("Post not found")));
+        comment.setUser(user); // utilisateur connecté
 
         // Sauvegarder
         Comment savedComment = commentRepository.save(comment);

@@ -19,7 +19,4 @@ public class PostRequest {
     @NotNull
     private Long topicId;
 
-    @NotNull
-    private Long userId;
-
 }
