@@ -2,6 +2,9 @@ package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.dto.SubscriptionRequest;
 import com.openclassrooms.mddapi.dto.SubscriptionResponse;
+import com.openclassrooms.mddapi.dto.UpdateProfileRequest;
+import com.openclassrooms.mddapi.dto.UserProfileResponse;
+import com.openclassrooms.mddapi.dto.UserResponse;
 import com.openclassrooms.mddapi.service.UserService;
 import jakarta.validation.Valid;
 import com.openclassrooms.mddapi.service.SubscriptionService;
@@ -10,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -44,6 +45,37 @@ public class UserController {
         try {
             subscriptionService.unsubscribe(request.getUserId(), request.getTopicId());
             return ResponseEntity.ok("Unsubscribed successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+        try {
+            UserProfileResponse profile = userService.getUserProfile(userId);
+            return ResponseEntity.ok(profile);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/profile/{userId}")
+    public ResponseEntity<?> updateProfile(@PathVariable Long userId,
+            @Valid @RequestBody UpdateProfileRequest request) {
+        try {
+            UserResponse response = userService.updateProfile(userId, request);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/subscriptions/{userId}")
+    public ResponseEntity<?> getUserSubscriptions(@PathVariable Long userId) {
+        try {
+            UserProfileResponse profile = userService.getUserProfile(userId);
+            return ResponseEntity.ok(profile.getSubscriptions());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
