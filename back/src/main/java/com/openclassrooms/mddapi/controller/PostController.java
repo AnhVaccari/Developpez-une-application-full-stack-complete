@@ -2,8 +2,10 @@ package com.openclassrooms.mddapi.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.catalina.connector.Response;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +18,9 @@ import com.openclassrooms.mddapi.dto.CommentRequest;
 import com.openclassrooms.mddapi.dto.CommentResponse;
 import com.openclassrooms.mddapi.dto.PostRequest;
 import com.openclassrooms.mddapi.dto.PostResponse;
+import com.openclassrooms.mddapi.dto.PostWithCommentsResponse;
+import com.openclassrooms.mddapi.model.Post;
+import com.openclassrooms.mddapi.repository.PostRepository;
 import com.openclassrooms.mddapi.service.CommentService;
 import com.openclassrooms.mddapi.service.PostService;
 
@@ -35,6 +40,12 @@ public class PostController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request) {
@@ -71,6 +82,33 @@ public class PostController {
     public ResponseEntity<List<CommentResponse>> getComments(@PathVariable Long postId) {
         List<CommentResponse> comments = commentService.getCommentsByPostId(postId);
         return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getPostWithComments(@PathVariable Long id) {
+        try {
+            // Récupérer l'article
+            Optional<Post> postOpt = postRepository.findById(id);
+            if (postOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Post post = postOpt.get();
+            PostResponse postResponse = modelMapper.map(post, PostResponse.class);
+
+            // Récupérer les commentaires
+            List<CommentResponse> comments = commentService.getCommentsByPostId(id);
+
+            // Créer la réponse complète
+            PostWithCommentsResponse response = new PostWithCommentsResponse();
+            response.setPost(postResponse);
+            response.setComments(comments);
+            response.setCommentCount(comments.size());
+
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
     }
 
 }
