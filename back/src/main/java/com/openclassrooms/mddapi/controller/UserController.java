@@ -5,15 +5,18 @@ import com.openclassrooms.mddapi.dto.SubscriptionResponse;
 import com.openclassrooms.mddapi.dto.UpdateProfileRequest;
 import com.openclassrooms.mddapi.dto.UserProfileResponse;
 import com.openclassrooms.mddapi.dto.UserResponse;
+import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.repository.UserRepository;
 import com.openclassrooms.mddapi.service.UserService;
 import jakarta.validation.Valid;
 import com.openclassrooms.mddapi.service.SubscriptionService;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private SubscriptionService subscriptionService;
@@ -81,8 +87,24 @@ public class UserController {
         }
     }
 
+    @GetMapping("/profile")
+    public ResponseEntity<?> getMyProfile(Authentication authentication) {
+        try {
+            // Récupérer l'email depuis le JWT
+            String email = authentication.getName();
 
+            // Trouver l'utilisateur par email
+            Optional<User> userOpt = userRepository.findByEmail(email);
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            Long userId = userOpt.get().getId();
+            UserProfileResponse profile = userService.getUserProfile(userId);
+            return ResponseEntity.ok(profile);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 
 }
-
-
