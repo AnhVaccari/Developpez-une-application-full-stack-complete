@@ -6,7 +6,10 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.openclassrooms.mddapi.dto.LoginRequest;
+import com.openclassrooms.mddapi.dto.LoginResponse;
 import com.openclassrooms.mddapi.dto.RegisterRequest;
 import com.openclassrooms.mddapi.dto.TopicResponse;
 import com.openclassrooms.mddapi.dto.UpdateProfileRequest;
@@ -16,10 +19,10 @@ import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.SubscriptionRepository;
 import com.openclassrooms.mddapi.repository.TopicRepository;
 import com.openclassrooms.mddapi.repository.UserRepository;
+import com.openclassrooms.mddapi.util.JwtUtil;
 import com.openclassrooms.mddapi.model.Subscription;
 
 import com.openclassrooms.mddapi.model.Topic;
-import com.openclassrooms.mddapi.repository.PostRepository;
 
 import java.util.List;
 
@@ -29,7 +32,14 @@ import java.util.List;
 public class UserService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
@@ -41,45 +51,58 @@ public class UserService {
 
     public UserResponse register(RegisterRequest request) {
 
-        // 1. Vérifier que l'email n'existe pas déjà
+        // Vérifier existence de l'utilisateur
         Optional<User> existingUser = userRepository.findByEmail(request.getEmail());
         if (existingUser.isPresent()) {
             throw new RuntimeException("Email already exists");
         }
 
-        // 2. Convertir DTO → Entity avec ModelMapper
+        // Convertir DTO → Entity avec ModelMapper
         User user = modelMapper.map(request, User.class);
 
-        // 3. Sauvegarder en base
+        // HASHER le mot de passe
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        // Sauvegarder en base
         User savedUser = userRepository.save(user);
 
-        // 4. Convertir Entity → DTO Response avec ModelMapper
+        // Convertir Entity → DTO Response avec ModelMapper
         return modelMapper.map(savedUser, UserResponse.class);
     }
 
 
-    public UserResponse login(String email, String password) {
+    public LoginResponse login(LoginRequest request) {
 
-        System.out.println("Tentative login avec: " + email + " / " + password);
+        // Trouver l'utilisateur
+        Optional<User> userOpt = userRepository.findByEmail(request.getEmail());
+        if (userOpt.isEmpty()) {
 
-        Optional<User> user = userRepository.findByEmail(email);
-        if (user.isEmpty()) {
-
-            System.out.println("Utilisateur introuvable");
             throw new RuntimeException("User not found");
         }
 
-        System.out.println("Mot de passe attendu: " + user.get().getPassword());
+        User user = userOpt.get();
 
-        if (!user.get().getPassword().equals(password)) {
-
-            System.out.println("Mot de passe invalide");
-            throw new RuntimeException("Invalid password");
+        // Vérifier le mot de passe
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid email or password");
         }
 
-        System.out.println("Connexion réussie");
-        return modelMapper.map(user.get(), UserResponse.class);
+        // Générer le token JWT
+        String token = jwtUtil.generateToken(user.getEmail(), user.getId());
+
+        // Créer la réponse
+        LoginResponse response = new LoginResponse();
+        response.setToken(token);
+        response.setUserId(user.getId());
+        response.setEmail(user.getEmail());
+        response.setUsername(user.getUsername());
+
+        return response;
+
+
     }
+
+
 
     public UserProfileResponse getUserProfile(Long userId) {
         // Récupérer l'utilisateur
