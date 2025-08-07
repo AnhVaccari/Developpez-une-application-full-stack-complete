@@ -57,20 +57,17 @@ public class PostService {
     }
 
     public List<PostResponse> getFeed(Long userId, String sort) {
-        System.out.println("=== GET FEED for userId: " + userId + " ===");
 
         // 1. Récupérer les sujets auxquels l'utilisateur est abonné
         List<Subscription> subscriptions = subscriptionRepository.findByUserId(userId);
-        System.out.println("Subscriptions found: " + subscriptions.size());
 
         List<Long> topicIds = subscriptions.stream()
                 .map(Subscription::getTopicId)
                 .collect(Collectors.toList());
-        System.out.println("Topic IDs: " + topicIds);
 
         if (topicIds.isEmpty()) {
-            System.out.println("No subscriptions, returning empty feed");
-            return new ArrayList<>(); // Pas d'abonnements = fil vide
+            // Pas d'abonnements = fil vide
+            return new ArrayList<>();
         }
 
         // 2. Récupérer les posts avec tri

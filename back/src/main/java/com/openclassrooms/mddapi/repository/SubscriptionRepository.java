@@ -8,7 +8,6 @@ import com.openclassrooms.mddapi.model.Subscription;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-
     Optional<Subscription> findByUserIdAndTopicId(Long userId, Long topicId);
 
     List<Subscription> findByUserId(Long userId);

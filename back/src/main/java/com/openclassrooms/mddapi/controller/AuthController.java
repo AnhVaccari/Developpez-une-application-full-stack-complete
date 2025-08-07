@@ -46,10 +46,4 @@ public class AuthController {
 
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> test() {
-        System.out.println("=== TEST ENDPOINT CALLED ===");
-        return ResponseEntity.ok("AuthController works!");
-    }
-
 }
