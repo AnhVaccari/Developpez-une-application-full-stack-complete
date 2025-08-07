@@ -40,11 +40,12 @@ public class SubscriptionService {
     }
 
     public void unsubscribe(Long userId, Long topicId) {
+
         Optional<Subscription> subscription = subscriptionRepository.findByUserIdAndTopicId(userId, topicId);
         if (subscription.isEmpty()) {
             throw new RuntimeException("Not subscribed to this topic");
         }
-
         subscriptionRepository.delete(subscription.get());
+
     }
 }

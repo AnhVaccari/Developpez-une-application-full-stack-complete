@@ -75,8 +75,8 @@ public class PostController {
             String email = authentication.getName();
             User currentUser = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found !"));
-
-            request.setPostId(postId); // injecte le postId
+            // injecte le postId dans la requête
+            request.setPostId(postId);
 
             CommentResponse response = commentService.createComment(request, currentUser); // passe l'user
 
