@@ -12,9 +12,16 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { LoginComponent } from './components/features/login/login.component';
 import { RegisterComponent } from './components/features/register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, TopicsComponent, LoginComponent, RegisterComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    TopicsComponent,
+    LoginComponent,
+    RegisterComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -23,6 +30,7 @@ import { RegisterComponent } from './components/features/register/register.compo
     HttpClientModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

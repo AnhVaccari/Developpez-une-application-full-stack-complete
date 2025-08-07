@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { AuthResponse } from 'src/app/shared/authResponse';
-import { User } from 'src/app/shared/models/user.model';
+
 import { Observable, tap } from 'rxjs';
+import {
+  AuthResponse,
+  LoginRequest,
+  User,
+} from 'src/app/shared/models/auth.models';
 
 @Injectable({
   providedIn: 'root',
@@ -16,12 +20,9 @@ export class AuthService {
     return this.apiService.post<AuthResponse>(`${this.baseUrl}/register`, user);
   }
 
-  login(credentials: {
-    email: string;
-    password: string;
-  }): Observable<AuthResponse> {
+  login(loginRequest: LoginRequest): Observable<AuthResponse> {
     return this.apiService
-      .post<AuthResponse>(`${this.baseUrl}/login`, credentials)
+      .post<AuthResponse>(`${this.baseUrl}/login`, loginRequest)
       .pipe(
         tap((response) => {
           localStorage.setItem('token', response.token);
