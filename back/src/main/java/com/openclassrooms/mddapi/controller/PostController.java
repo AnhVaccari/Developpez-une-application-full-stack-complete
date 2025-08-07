@@ -40,13 +40,7 @@ public class PostController {
     private CommentService commentService;
 
     @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<?> createPost(@Valid @RequestBody PostRequest request, Authentication authentication) {
@@ -65,11 +59,15 @@ public class PostController {
         }
     }
 
-    @GetMapping("/feed/{userId}")
-    public ResponseEntity<List<PostResponse>> getFeed(@PathVariable Long userId,
+    @GetMapping("/feed")
+    public ResponseEntity<List<PostResponse>> getFeed(Authentication authentication,
             @RequestParam(defaultValue = "desc") String sort) {
 
-        List<PostResponse> posts = postService.getFeed(userId, sort);
+        String email = authentication.getName();
+        User currentUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found !"));
+
+        List<PostResponse> posts = postService.getFeed(currentUser.getId(), sort);
         return ResponseEntity.ok(posts);
     }
 
@@ -82,9 +80,9 @@ public class PostController {
             User currentUser = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("User not found !"));
 
-            request.setPostId(postId); // on injecte le postId
+            request.setPostId(postId); // injecte le postId
 
-            CommentResponse response = commentService.createComment(request, currentUser); // on passe l'user
+            CommentResponse response = commentService.createComment(request, currentUser); // passe l'user
 
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -101,24 +99,7 @@ public class PostController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getPostWithComments(@PathVariable Long id) {
         try {
-            // Récupérer l'article
-            Optional<Post> postOpt = postRepository.findById(id);
-            if (postOpt.isEmpty()) {
-                return ResponseEntity.notFound().build();
-            }
-
-            Post post = postOpt.get();
-            PostResponse postResponse = modelMapper.map(post, PostResponse.class);
-
-            // Récupérer les commentaires
-            List<CommentResponse> comments = commentService.getCommentsByPostId(id);
-
-            // Créer la réponse complète
-            PostWithCommentsResponse response = new PostWithCommentsResponse();
-            response.setPost(postResponse);
-            response.setComments(comments);
-            response.setCommentCount(comments.size());
-
+            PostWithCommentsResponse response = postService.getPostWithComments(id);
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());

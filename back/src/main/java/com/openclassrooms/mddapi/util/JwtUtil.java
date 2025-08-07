@@ -26,7 +26,6 @@ public class JwtUtil {
     public String generateToken(String email, Long userId) {
         return Jwts.builder()
                 .setSubject(email) // Le "propriétaire" du token
-                .claim("userId", userId) // Données custom (userId)
                 .setIssuedAt(new Date(System.currentTimeMillis())) // Date de création
                 .setExpiration(new Date(System.currentTimeMillis() + expiration)) // Date
                                                                                   // d'expiration

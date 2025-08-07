@@ -20,11 +20,9 @@ public class TopicController {
 
     @GetMapping
     public ResponseEntity<List<TopicResponse>> getAllTopics() {
-        System.out.println("=== GET /api/topics CALLED ===");
+
         List<TopicResponse> topics = topicService.getAllTopics();
         return ResponseEntity.ok(topics);
     }
-
-
 
 }

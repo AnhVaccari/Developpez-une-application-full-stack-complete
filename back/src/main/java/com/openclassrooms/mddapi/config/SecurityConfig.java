@@ -20,10 +20,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.openclassrooms.mddapi.security.JwtAuthenticationFilter;
 
+import lombok.RequiredArgsConstructor;
+
 import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     @Value("${jwt.secret}")
@@ -43,9 +46,19 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // public endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/topics").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/topics/*").permitAll()
+
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/topics/**").permitAll()
+                        .requestMatchers("/api/posts/feed").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/posts/*/comments").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/posts/*/comments").authenticated()
+
+                        .requestMatchers("/api/user/profile").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()
+                        .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

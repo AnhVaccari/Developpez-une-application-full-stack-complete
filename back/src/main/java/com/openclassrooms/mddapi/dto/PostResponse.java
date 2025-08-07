@@ -18,6 +18,4 @@ public class PostResponse {
     private String authorUsername;
     private String topicName;
 
-
-
 }

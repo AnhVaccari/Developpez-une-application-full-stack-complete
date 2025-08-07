@@ -7,8 +7,11 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.openclassrooms.mddapi.dto.CommentResponse;
 import com.openclassrooms.mddapi.dto.PostRequest;
 import com.openclassrooms.mddapi.dto.PostResponse;
+import com.openclassrooms.mddapi.dto.PostWithCommentsResponse;
 import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.model.Subscription;
 import com.openclassrooms.mddapi.model.Topic;
@@ -30,6 +33,9 @@ public class PostService {
     private TopicRepository topicRepository;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public PostResponse createPost(PostRequest request, User user) {
@@ -46,7 +52,9 @@ public class PostService {
         Post savedPost = postRepository.save(post);
 
         // ModelMapper pour la réponse
-        return modelMapper.map(savedPost, PostResponse.class);
+        Post savedPostWithRelations = postRepository.findByIdWithUserAndTopic(savedPost.getId())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        return modelMapper.map(savedPostWithRelations, PostResponse.class);
     }
 
     public List<PostResponse> getFeed(Long userId, String sort) {
@@ -69,15 +77,35 @@ public class PostService {
         // 2. Récupérer les posts avec tri
         List<Post> posts;
         if ("asc".equalsIgnoreCase(sort)) {
-            posts = postRepository.findByTopicIdInOrderByCreatedAtAsc(topicIds);
+            posts = postRepository.findByTopicIdInWithUserAndTopicOrderByCreatedAtAsc(topicIds);
         } else {
-            posts = postRepository.findByTopicIdInOrderByCreatedAtDesc(topicIds);
+            posts = postRepository.findByTopicIdInWithUserAndTopicOrderByCreatedAtDesc(topicIds);
         }
 
         // 3. Convertir en DTO
         return posts.stream()
                 .map(post -> modelMapper.map(post, PostResponse.class))
                 .collect(Collectors.toList());
+    }
+
+    public PostWithCommentsResponse getPostWithComments(Long postId) {
+        // Récupérer le post avec relations
+        Post post = postRepository.findByIdWithUserAndTopic(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        // Mapper le post
+        PostResponse postResponse = modelMapper.map(post, PostResponse.class);
+
+        // Récupérer les commentaires
+        List<CommentResponse> comments = commentService.getCommentsByPostId(postId);
+
+        // Créer la réponse complète
+        PostWithCommentsResponse response = new PostWithCommentsResponse();
+        response.setPost(postResponse);
+        response.setComments(comments);
+        response.setCommentCount(comments.size());
+
+        return response;
     }
 
 }
