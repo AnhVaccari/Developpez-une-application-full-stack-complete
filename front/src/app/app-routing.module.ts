@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { TopicsComponent } from './pages/topics/topics.component';
-import { LoginComponent } from './pages/login/login.component';
-import { RegisterComponent } from './pages/register/register.component';
+import { TopicsComponent } from './pages/components/topics/topics.component';
+import { LoginComponent } from './pages/components/login/login.component';
+import { RegisterComponent } from './pages/components/register/register.component';
+import { HomeComponent } from './pages/components/home/home.component';
 
 // consider a guard combined with canLoad / canActivate route option
 // to manage unauthenticated user to access private routes
