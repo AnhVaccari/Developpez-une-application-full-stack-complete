@@ -47,6 +47,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/topics/**").permitAll()
                         .requestMatchers("/api/posts/feed").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/posts/{id}").permitAll()
@@ -55,8 +56,6 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/posts").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/posts/*/comments").authenticated()
 
-                        .requestMatchers("/api/user/profile").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/user/profile").authenticated()
                         .requestMatchers("/api/user/**").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
