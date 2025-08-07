@@ -26,8 +26,6 @@ import com.openclassrooms.mddapi.model.Topic;
 
 import java.util.List;
 
-
-
 @Service
 public class UserService {
 
@@ -70,7 +68,6 @@ public class UserService {
         return modelMapper.map(savedUser, UserResponse.class);
     }
 
-
     public LoginResponse login(LoginRequest request) {
 
         // Trouver l'utilisateur
@@ -99,10 +96,7 @@ public class UserService {
 
         return response;
 
-
     }
-
-
 
     public UserProfileResponse getUserProfile(Long userId) {
         // Récupérer l'utilisateur
@@ -133,7 +127,6 @@ public class UserService {
         return profile;
     }
 
-
     public UserResponse updateProfile(Long userId, UpdateProfileRequest request) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
@@ -150,13 +143,11 @@ public class UserService {
             user.setUsername(request.getUsername());
         }
         if (request.getPassword() != null) {
-            user.setPassword(request.getPassword());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
         User updatedUser = userRepository.save(user);
         return modelMapper.map(updatedUser, UserResponse.class);
     }
-
-
 
 }

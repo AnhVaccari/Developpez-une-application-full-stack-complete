@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 public class SubscriptionRequest {
-    @NotNull
-    private Long userId;
 
     @NotNull
     private Long topicId;

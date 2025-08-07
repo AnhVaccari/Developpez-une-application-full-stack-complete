@@ -1,8 +1,6 @@
 package com.openclassrooms.mddapi.controller;
 
 import java.util.List;
-import java.util.Optional;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,9 +15,7 @@ import com.openclassrooms.mddapi.dto.CommentResponse;
 import com.openclassrooms.mddapi.dto.PostRequest;
 import com.openclassrooms.mddapi.dto.PostResponse;
 import com.openclassrooms.mddapi.dto.PostWithCommentsResponse;
-import com.openclassrooms.mddapi.model.Post;
 import com.openclassrooms.mddapi.model.User;
-import com.openclassrooms.mddapi.repository.PostRepository;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import com.openclassrooms.mddapi.service.CommentService;
 import com.openclassrooms.mddapi.service.PostService;
