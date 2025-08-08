@@ -1,40 +1,60 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div>
-    <label for="username">Nom d'utilisateur</label>
-    <input id="username" type="text" formControlName="username" />
-    <div
-      *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
-      style="color: red"
-    >
-      Le nom d'utilisateur est obligatoire.
+<div class="mat-tab-nav-bar">
+  <img src="/assets/logo_p6.png" alt="logo" />
+
+  <span class="spacer"></span>
+</div>
+
+<div class="header">
+  <h1>Inscription</h1>
+  <button mat-icon-button (click)="goHome()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+</div>
+<div class="signup-container">
+  <form (ngSubmit)="submit()" [formGroup]="form" class="signup-form" novalidate>
+    <div class="form-group">
+      <label for="username" class="form-label">Nom utilisateur</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput id="username" formControlName="username" required />
+        <mat-error
+          *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
+        >
+          Nom utilisateur requis
+        </mat-error>
+      </mat-form-field>
     </div>
-  </div>
 
-  <div>
-    <label for="email">Email</label>
-    <input id="email" type="email" formControlName="email" />
-    <div
-      *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
-      style="color: red"
-    >
-      Email invalide ou obligatoire.
+    <div class="form-group">
+      <label for="email" class="form-label">Adresse e-mail</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput id="email" formControlName="email" required />
+        <mat-error
+          *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+        >
+          Email valide requis
+        </mat-error>
+      </mat-form-field>
     </div>
-  </div>
 
-  <div>
-    <label for="password">Mot de passe</label>
-    <input id="password" type="password" formControlName="password" />
-    <div
-      *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-      style="color: red"
-    >
-      Mot de passe obligatoire (min 6 caractères).
+    <div class="form-group">
+      <label for="password" class="form-label">Mot de passe</label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input matInput id="password" formControlName="password" required />
+        <mat-error
+          *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+        >
+          Mot de passe requis
+        </mat-error>
+      </mat-form-field>
     </div>
-  </div>
 
-  <button type="submit" [disabled]="form.invalid">S'inscrire</button>
-
-  <div *ngIf="errorMessage" style="color: red; margin-top: 10px">
-    {{ errorMessage }}
-  </div>
-</form>
+    <button
+      mat-raised-button
+      type="submit"
+      [disabled]="form.invalid"
+      class="btn-primary"
+    >
+      S'inscrire
+    </button>
+  </form>
+</div>

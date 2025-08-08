@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -15,11 +15,11 @@ export class RegisterComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     username: [
       '',
-      [Validators.required, Validators.min(3), Validators.max(20)],
+      [Validators.required, Validators.minLength(3), Validators.maxLength(20)],
     ],
     password: [
       '',
-      [Validators.required, Validators.min(3), Validators.max(40)],
+      [Validators.required, Validators.minLength(3), Validators.maxLength(40)],
     ],
   });
 
@@ -41,5 +41,9 @@ export class RegisterComponent implements OnInit {
       error: () =>
         (this.errorMessage = 'Inscription échouée. Veuillez réessayer.'),
     });
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
   }
 }
