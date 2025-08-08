@@ -69,6 +69,7 @@
 
 }
 
+
 /* Style des champs Material */
 .mat-form-field-appearance-outline .mat-form-field-outline {
   stroke: #ccc !important;
@@ -80,9 +81,9 @@
   opacity: 1 !important;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-outline-thick {
-  stroke-width: 2px !important;
-}
+// .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+//   stroke-width: 2px !important;
+// }
 
 /* Responsive mobile */
 @media (max-width: 768px) {
@@ -112,3 +113,6 @@
     font-size: 1.5rem;
   }
 }
+
+
+
