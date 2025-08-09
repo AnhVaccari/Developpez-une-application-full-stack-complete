@@ -18,6 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from './pages/components/navbar/navbar.component';
+import { NavbarConnectedComponent } from './pages/components/navbar-connected/navbar-connected.component';
+import { PostsComponent } from './pages/components/posts/posts.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import { NavbarComponent } from './pages/components/navbar/navbar.component';
     LoginComponent,
     RegisterComponent,
     NavbarComponent,
+    NavbarConnectedComponent,
+    PostsComponent,
   ],
   imports: [
     BrowserModule,

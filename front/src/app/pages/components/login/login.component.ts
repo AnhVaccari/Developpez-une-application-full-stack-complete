@@ -48,4 +48,11 @@ export class LoginComponent implements OnInit {
   goHome() {
     this.router.navigate(['/']);
   }
+
+  onLogin() {
+    // Votre logique de connexion
+    if (this.form.valid) {
+      this.router.navigate(['/topics']);
+    }
+  }
 }
