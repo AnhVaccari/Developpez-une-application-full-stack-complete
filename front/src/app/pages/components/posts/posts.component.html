@@ -7,7 +7,9 @@
   </div>
 
   <div *ngIf="!loading" class="actions-bar">
-    <button mat-raised-button class="create-btn">Créer un article</button>
+    <button mat-raised-button class="create-btn" routerLink="/create-post">
+      Créer un article
+    </button>
 
     <div class="sort-section">
       <span>Trier par</span>
@@ -21,6 +23,11 @@
       <mat-card-header>
         <mat-card-title>{{ post.name }}</mat-card-title>
       </mat-card-header>
+      <div class="subtitle-container">
+        <mat-card-subtitle>Date : </mat-card-subtitle>
+        <mat-card-subtitle>Auteur : Mr John Doe</mat-card-subtitle>
+      </div>
+
       <mat-card-content>
         <p>{{ post.description }}</p>
       </mat-card-content>

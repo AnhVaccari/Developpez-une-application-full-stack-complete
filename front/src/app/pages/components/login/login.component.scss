@@ -4,6 +4,7 @@
   align-items: center;
   padding: 16px 20px;
   position: relative;
+  margin-top: 30px;
 }
 
 .mat-tab-nav-bar img {
@@ -75,6 +76,10 @@
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
   stroke: #7832f1 !important;
   opacity: 1 !important;
+}
+
+.mat-icon {
+  cursor: pointer;
 }
 
 /* Responsive mobile */

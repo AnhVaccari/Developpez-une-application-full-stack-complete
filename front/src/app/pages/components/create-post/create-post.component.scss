@@ -2,20 +2,21 @@
   display: flex;
   align-items: center;
   padding: 1rem;
+  margin-top: 30px;
 }
 
 .back-button {
   margin-right: 1rem;
 }
 
-.header h2 {
+.header h1 {
   margin: 0;
   flex: 1;
   text-align: center;
 }
 
 .spacer {
-  width: 48px; /* même largeur que le bouton pour centrer parfaitement */
+  width: 48px;
 }
 
 .form-container {
@@ -36,7 +37,7 @@
 .create-btn {
   background-color: #7832f1;
   color: white;
-  min-width: 150px;
+  min-width: 130px;
   min-height: 48px;
   font-size: 1rem;
   border-radius: 8px;
@@ -50,3 +51,9 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+.mat-icon {
+  cursor: pointer;
+}
+
+
