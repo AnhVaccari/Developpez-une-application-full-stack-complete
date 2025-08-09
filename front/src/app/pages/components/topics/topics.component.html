@@ -1,8 +1,6 @@
 <app-navbar-connected></app-navbar-connected>
 
 <div class="topics-container">
-  <h2>Liste des Thèmes</h2>
-
   <!-- Spinner de chargement -->
   <div *ngIf="loading" class="loading">
     <mat-spinner></mat-spinner>
@@ -18,6 +16,15 @@
       <mat-card-content>
         <p>{{ topic.description }}</p>
       </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          [class.subscribed]="topic.isSubscribed"
+          [disabled]="topic.isSubscribed"
+        >
+          {{ topic.isSubscribed ? "Déjà abonné" : "S'abonner" }}
+        </button>
+      </mat-card-actions>
     </mat-card>
   </div>
 

@@ -1,4 +1,4 @@
-/* Header unifié */
+
 .header {
   display: flex;
   align-items: center;
@@ -13,15 +13,12 @@
   margin-right: auto;
 }
 
-
-/* Flèche retour à gauche du titre */
 .header .back-button {
   position: absolute;
   left: 50%;
-  transform: translateX(-50px); /* Décalé vers la gauche du centre */
+  transform: translateX(-50px);
 }
 
-/* Titre centré */
 .header h1 {
   position: absolute;
   left: 50%;
@@ -31,7 +28,6 @@
   font-weight: normal;
 }
 
-/* Container du formulaire */
 .signup-container {
   flex-direction: column;
   align-items: center;
@@ -59,9 +55,8 @@
   width: 100%;
 }
 
-/* Bouton S'inscrire */
 .btn-primary {
-  background-color: rgb(118, 47, 240) !important;
+  background-color: #7040c3 !important;
   color: white !important;
   font-size: 16px;
   display: block;
@@ -76,7 +71,7 @@
 }
 
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
-  stroke: rgb(126, 8, 228) !important;
+  stroke: #7040c3 !important;
   opacity: 1 !important;
 }
 
