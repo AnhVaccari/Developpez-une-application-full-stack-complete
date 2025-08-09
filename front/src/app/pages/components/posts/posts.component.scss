@@ -1,0 +1,55 @@
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.post-card {
+  max-width: 100%;
+  background-color: rgb(252, 249, 249);
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+
+.mat-card-actions button.subscribed {
+  background-color: #ccc;
+  color: #666;
+}
+
+.mat-card-actions button:disabled {
+  background-color: #ccc !important;
+  color: #666 !important;
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.create-btn {
+  background-color: #7832f1;
+  color: white;
+}
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .posts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+

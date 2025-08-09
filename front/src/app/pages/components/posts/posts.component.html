@@ -1,1 +1,34 @@
-<p>posts works!</p>
+<app-navbar-connected></app-navbar-connected>
+
+<div class="posts-container">
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Chargement des articles...</p>
+  </div>
+
+  <div *ngIf="!loading" class="actions-bar">
+    <button mat-raised-button class="create-btn">Créer un article</button>
+
+    <div class="sort-section">
+      <span>Trier par</span>
+      <mat-icon>arrow_downward</mat-icon>
+    </div>
+  </div>
+
+  <!-- Liste des posts -->
+  <div *ngIf="!loading && posts.length > 0" class="posts-grid">
+    <mat-card *ngFor="let post of posts" class="post-card">
+      <mat-card-header>
+        <mat-card-title>{{ post.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ post.description }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Message si aucun posts -->
+  <div *ngIf="!loading && posts.length === 0" class="no-posts">
+    <p>Aucun article disponible</p>
+  </div>
+</div>
