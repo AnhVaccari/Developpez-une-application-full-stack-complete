@@ -16,16 +16,31 @@
   <!-- Menu hamburger mobile -->
   <div class="mobile-nav">
     <mat-icon class="hamburger-icon" (click)="toggleMenu()">menu</mat-icon>
+  </div>
+</div>
 
-    <!-- Menu déroulant -->
-    <div class="mobile-menu" [class.show]="isMenuOpen">
-      <a href="#" class="nav-link">Se déconnecter</a>
-      <a routerLink="/posts" class="nav-link" routerLinkActive="active"
+<!-- Overlay et menu mobile plein écran -->
+<div class="mobile-overlay" [class.show]="isMenuOpen" (click)="closeMenu()">
+  <div class="mobile-menu-panel" (click)="$event.stopPropagation()">
+    <div class="menu-links">
+      <a href="#" class="nav-link" (click)="closeMenu()">Se déconnecter</a>
+      <a
+        routerLink="/posts"
+        class="nav-link"
+        routerLinkActive="active"
+        (click)="closeMenu()"
         >Articles</a
       >
-      <a routerLink="/topics" class="nav-link" routerLinkActive="active"
+      <a
+        routerLink="/topics"
+        class="nav-link"
+        routerLinkActive="active"
+        (click)="closeMenu()"
         >Thèmes</a
       >
+    </div>
+    <div class="menu-footer">
+      <mat-icon class="user-icon">account_circle</mat-icon>
     </div>
   </div>
 </div>
