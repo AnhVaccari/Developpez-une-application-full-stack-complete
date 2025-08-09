@@ -13,13 +13,18 @@ import { LoginComponent } from './pages/components/login/login.component';
 import { RegisterComponent } from './pages/components/register/register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/components/home/home.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from './pages/components/navbar/navbar.component';
 import { NavbarConnectedComponent } from './pages/components/navbar-connected/navbar-connected.component';
 import { PostsComponent } from './pages/components/posts/posts.component';
+import { CreatePostComponent } from './pages/components/create-post/create-post.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -31,6 +36,7 @@ import { PostsComponent } from './pages/components/posts/posts.component';
     NavbarComponent,
     NavbarConnectedComponent,
     PostsComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,7 @@ import { PostsComponent } from './pages/components/posts/posts.component';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-
+    MatSelectModule,
     ReactiveFormsModule,
   ],
   providers: [
@@ -53,6 +59,10 @@ import { PostsComponent } from './pages/components/posts/posts.component';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { appearance: 'outline' },
     },
   ],
   bootstrap: [AppComponent],

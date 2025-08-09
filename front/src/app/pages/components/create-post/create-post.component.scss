@@ -1,0 +1,52 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.back-button {
+  margin-right: 1rem;
+}
+
+.header h2 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.spacer {
+  width: 48px; /* même largeur que le bouton pour centrer parfaitement */
+}
+
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.create-btn {
+  background-color: #7832f1;
+  color: white;
+  min-width: 150px;
+  min-height: 48px;
+  font-size: 1rem;
+  border-radius: 8px;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

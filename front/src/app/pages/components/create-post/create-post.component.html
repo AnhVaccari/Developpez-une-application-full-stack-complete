@@ -1,0 +1,32 @@
+<app-navbar-connected></app-navbar-connected>
+
+<div class="header">
+  <button mat-icon-button class="back-button" routerLink="/posts">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h2>Créer un article</h2>
+  <div class="spacer"></div>
+</div>
+
+<div class="form-container">
+  <mat-form-field>
+    <mat-select placeholder="Sélectionner un thème">
+      <mat-option value="Java">Java</mat-option>
+      <mat-option value="Angular">Angular</mat-option>
+      <mat-option value="Python">Python</mat-option>
+      <mat-option value="Spring Boot">Spring Boot</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Titre de l'article" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Contenu de l'article" rows="10"></textarea>
+  </mat-form-field>
+
+  <div class="form-actions">
+    <button mat-raised-button class="create-btn">Créer</button>
+  </div>
+</div>
