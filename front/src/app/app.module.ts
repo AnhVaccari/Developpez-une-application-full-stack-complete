@@ -26,6 +26,7 @@ import { PostsComponent } from './pages/components/posts/posts.component';
 import { CreatePostComponent } from './pages/components/create-post/create-post.component';
 import { MatSelectModule } from '@angular/material/select';
 import { UserProfileComponent } from './pages/components/user-profile/user-profile.component';
+import { PostDetailComponent } from './pages/components/post-detail/post-detail.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { UserProfileComponent } from './pages/components/user-profile/user-profi
     PostsComponent,
     CreatePostComponent,
     UserProfileComponent,
+    PostDetailComponent,
   ],
   imports: [
     BrowserModule,

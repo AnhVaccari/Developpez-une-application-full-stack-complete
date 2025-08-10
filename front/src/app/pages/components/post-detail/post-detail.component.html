@@ -1,0 +1,57 @@
+<app-navbar-connected></app-navbar-connected>
+
+<div class="article-container">
+  <!-- Header avec flèche et titre -->
+  <div class="article-header">
+    <button mat-icon-button class="back-button" routerLink="/posts">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="article-title">Titre de l'article sélectionné</h1>
+  </div>
+
+  <!-- Métadonnées -->
+  <div class="article-meta">
+    <span>Date</span>
+    <span>Auteur</span>
+    <span>Thème</span>
+  </div>
+
+  <!-- Contenu article -->
+  <div class="article-content">
+    <p class="content-text">
+      Content: lorem ipsum is simply dummy text of the printing and typesetting
+      industry...
+    </p>
+  </div>
+
+  <hr class="separator" />
+
+  <!-- Section commentaires -->
+  <div class="comments-section">
+    <h2>Commentaires</h2>
+
+    <!-- Liste des commentaires existants -->
+    <div class="comments-list">
+      <div class="comment">
+        <div class="comment-username">username</div>
+        <mat-card class="comment-card">
+          <mat-card-content> contenu du commentaire </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Formulaire commentaire -->
+    <div class="comment-form">
+      <mat-form-field appearance="outline" class="comment-input">
+        <textarea
+          matInput
+          placeholder="Écrivez ici votre commentaire"
+          rows="2"
+        ></textarea>
+      </mat-form-field>
+      <button mat-fab class="send-button">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
