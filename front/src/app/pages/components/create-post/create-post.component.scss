@@ -56,6 +56,33 @@
   cursor: pointer;
 }
 
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .back-button {
+    margin-right: 0;
+    align-self: flex-start;
+  }
+
+  .header h1 {
+    text-align: left;
+    width: 100%;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  .form-container {
+    max-width: 90%;
+    padding: 1rem;
+  }
+}
+
 
 
 
