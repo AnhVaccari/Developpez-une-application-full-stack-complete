@@ -28,7 +28,7 @@
 }
 
 .nav-link.active {
-  color: #673ab7;
+  color: #7832f1;
 }
 
 .user-icon {
@@ -36,6 +36,10 @@
   color: gray;
   cursor: pointer;
   margin-right: 3rem;
+}
+
+.user-icon.active {
+  color: #7832f1;
 }
 
 /* Mobile styles */
@@ -111,6 +115,10 @@
   margin-top: auto;
 }
 
+.menu-footer .user-icon.active {
+  color: #7832f1;
+}
+
 @media (max-width: 768px) {
   .desktop-nav {
     display: none;
@@ -119,6 +127,7 @@
   .mobile-nav {
     display: block;
   }
+
 }
 
 

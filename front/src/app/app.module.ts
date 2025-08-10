@@ -25,6 +25,7 @@ import { NavbarConnectedComponent } from './pages/components/navbar-connected/na
 import { PostsComponent } from './pages/components/posts/posts.component';
 import { CreatePostComponent } from './pages/components/create-post/create-post.component';
 import { MatSelectModule } from '@angular/material/select';
+import { UserProfileComponent } from './pages/components/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { MatSelectModule } from '@angular/material/select';
     NavbarConnectedComponent,
     PostsComponent,
     CreatePostComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,91 @@
+<app-navbar-connected></app-navbar-connected>
+
+<div class="header">
+  <h1>Profil utilisateur</h1>
+</div>
+<div class="profile-container">
+  <form [formGroup]="form" class="profile-form" novalidate>
+    <div class="form-group">
+      <label for="username" class="form-label"></label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          matInput
+          id="username"
+          formControlName="username"
+          required
+          placeholder="Username"
+        />
+        <mat-error
+          *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
+        >
+          Nom utilisateur requis
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="email" class="form-label"></label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          matInput
+          id="email"
+          formControlName="email"
+          required
+          placeholder="email@email.fr"
+        />
+        <mat-error
+          *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+        >
+          Email valide requis
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-group">
+      <label for="password" class="form-label"></label>
+      <mat-form-field appearance="outline" class="full-width">
+        <input
+          matInput
+          id="password"
+          formControlName="password"
+          required
+          placeholder="Mot de passe"
+        />
+        <mat-error
+          *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+        >
+          Mot de passe requis
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <button
+      mat-raised-button
+      type="submit"
+      [disabled]="form.invalid"
+      class="btn-primary"
+    >
+      Sauvegarder
+    </button>
+  </form>
+</div>
+
+<hr class="separator" />
+
+<div class="subscriptions-section">
+  <h2 class="subscriptions-title">Abonnements</h2>
+
+  <div class="subscriptions-grid">
+    <mat-card class="subscription-card" *ngFor="let theme of subscribedThemes">
+      <mat-card-header>
+        <mat-card-title>{{ theme.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ theme.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button class="unsubscribe-btn">Se désabonner</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
