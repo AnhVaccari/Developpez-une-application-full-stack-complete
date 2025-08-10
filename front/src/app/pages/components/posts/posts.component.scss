@@ -58,10 +58,29 @@
   cursor: pointer;
 }
 
+
 @media (max-width: 768px) {
-  .posts-grid {
+
+   .posts-grid {
     grid-template-columns: 1fr;
   }
+
+   .actions-bar {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .create-btn {
+    width: 80%;
+    min-width: 200px;
+  }
+
+  .sort-section {
+    align-self: center;
+  }
 }
+
+
 
 
