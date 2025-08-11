@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { TopicService } from 'src/app/core/services/topic.service';
 import { Topic } from 'src/app/shared/models/topic.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-topics',
@@ -8,37 +10,13 @@ import { Topic } from 'src/app/shared/models/topic.model';
   styleUrls: ['./topics.component.scss'],
 })
 export class TopicsComponent implements OnInit {
-  //topics: Topic[] = [];
+  topics: Topic[] = [];
   loading: boolean = false;
 
-  topics = [
-    {
-      name: 'Titre du thème 1',
-      isSubscribed: true,
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: 'Titre du thème 2',
-      isSubscribed: true,
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: 'Titre du thème 3',
-      isSubscribed: false,
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: 'Titre du thème 5',
-      isSubscribed: false,
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-  ];
-
-  constructor(private topicService: TopicService) {}
+  constructor(
+    private topicService: TopicService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     this.loadTopics();
@@ -46,15 +24,82 @@ export class TopicsComponent implements OnInit {
 
   loadTopics(): void {
     this.loading = true;
-    this.topicService.getAllTopics().subscribe({
-      next: (topics) => {
-        //this.topics = topics;
+
+    forkJoin({
+      topics: this.topicService.getAllTopics(),
+      subscriptions: this.topicService.getUserSubscriptions(),
+    }).subscribe({
+      next: ({ topics, subscriptions }) => {
+        console.log('Topics:', topics);
+        console.log('Subscriptions:', subscriptions);
+
+        // Créer un Set des IDs auxquels l'utilisateur est abonné
+        const subscribedIds = new Set(subscriptions.map((sub) => sub.id));
+
+        this.topics = topics.map((topic) => ({
+          ...topic,
+          isSubscribed: subscribedIds.has(topic.id),
+        }));
+
         this.loading = false;
-        console.log('Topics loaded:', topics);
+        console.log('Topics avec statut:', this.topics);
       },
       error: (error) => {
-        console.error('Error loading topics:', error);
+        console.error('Erreur:', error);
         this.loading = false;
+      },
+    });
+  }
+
+  subscribe(topic: Topic): void {
+    console.log('Abonnement au topic:', topic);
+
+    this.topicService.subscribe(topic.id).subscribe({
+      next: (response) => {
+        console.log('Abonnement réussi:', response);
+        // Mettre à jour l'état local
+        topic.isSubscribed = true;
+        this.snackBar.open(`Abonné à ${topic.name} !`, 'Fermer', {
+          duration: 3000,
+        });
+      },
+      error: (error) => {
+        if (error.status === 400) {
+          // Déjà abonné
+          topic.isSubscribed = true;
+          console.log('Utilisateur déjà abonné');
+          this.snackBar.open('Vous êtes déjà abonné !', 'Fermer', {
+            duration: 3000,
+          });
+        } else {
+          console.error('Erreur abonnement:', error);
+          this.snackBar.open("Erreur lors de l'abonnement", 'Fermer', {
+            duration: 3000,
+          });
+        }
+      },
+    });
+  }
+
+  unsubscribe(topic: Topic): void {
+    console.log('Désabonnement du topic:', topic);
+
+    this.topicService.unsubscribe(topic.id).subscribe({
+      next: (response) => {
+        console.log('Désabonnement réussi:', response);
+        // Mettre à jour l'état local
+        topic.isSubscribed = false;
+        this.snackBar.open(`Désabonné de ${topic.name}`, 'Fermer', {
+          duration: 3000,
+        });
+      },
+      error: (error) => {
+        console.error('Erreur désabonnement:', error);
+        // Même en cas d'erreur, on recharge pour vérifier le vrai état
+        this.loadTopics(); // Recharge tout depuis la BDD
+        this.snackBar.open('Action effectuéee', 'Fermer', {
+          duration: 2000,
+        });
       },
     });
   }

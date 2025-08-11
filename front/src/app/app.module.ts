@@ -27,6 +27,7 @@ import { CreatePostComponent } from './pages/components/create-post/create-post.
 import { MatSelectModule } from '@angular/material/select';
 import { UserProfileComponent } from './pages/components/user-profile/user-profile.component';
 import { PostDetailComponent } from './pages/components/post-detail/post-detail.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { PostDetailComponent } from './pages/components/post-detail/post-detail.
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
   ],
   providers: [

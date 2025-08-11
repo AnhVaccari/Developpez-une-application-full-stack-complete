@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import {
   AuthResponse,
   LoginRequest,
@@ -21,11 +21,29 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<AuthResponse> {
+    console.log('Tentative de login avec:', loginRequest);
     return this.apiService
       .post<AuthResponse>(`${this.baseUrl}/login`, loginRequest)
       .pipe(
         tap((response) => {
-          localStorage.setItem('token', response.token);
+          console.log('Réponse login complète:', response);
+          console.log('Token reçu:', response.token);
+
+          if (response.token) {
+            localStorage.setItem('token', response.token);
+            console.log('Token stocké avec succès');
+          } else {
+            console.error('Pas de token dans la réponse !');
+          }
+
+          console.log(
+            'Vérification localStorage:',
+            localStorage.getItem('token')
+          );
+        }),
+        catchError((error) => {
+          console.error('Erreur login:', error);
+          throw error;
         })
       );
   }

@@ -32,14 +32,15 @@ export class LoginComponent implements OnInit {
     }
 
     const loginRequest: LoginRequest = this.form.getRawValue();
+    console.log('Tentative de login avec:', loginRequest); // Debug
 
     this.authService.login(loginRequest).subscribe({
       next: (response: AuthResponse) => {
-        // Stocke le token, redirige vers la page d'accueil
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/']);
+        console.log('Login réussi, redirection...'); // Debug
+        this.router.navigate(['/topics']); // Le token est déjà stocké dans le service
       },
       error: (error) => {
+        console.error('Erreur login:', error); // Debug
         this.errorMessage = 'Email or password is incorrect';
       },
     });
@@ -47,12 +48,5 @@ export class LoginComponent implements OnInit {
 
   goHome() {
     this.router.navigate(['/']);
-  }
-
-  onLogin() {
-    // Votre logique de connexion
-    if (this.form.valid) {
-      this.router.navigate(['/topics']);
-    }
   }
 }

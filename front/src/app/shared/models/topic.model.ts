@@ -3,4 +3,5 @@ export interface Topic {
   name: string;
   description: string;
   created_at: Date;
+  isSubscribed?: boolean;
 }

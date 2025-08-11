@@ -33,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
           // Token expiré ou invalide
           console.log('Token expiré - déconnexion automatique');
           localStorage.removeItem('token');
-          this.router.navigate(['/login']); // Rediriger vers login
+          this.router.navigate(['/login']);
         }
 
         throw error;
