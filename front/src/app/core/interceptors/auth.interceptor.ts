@@ -4,17 +4,20 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    // Ajouter le token à la requête
     const token = localStorage.getItem('token');
     if (token) {
       request = request.clone({
@@ -23,6 +26,18 @@ export class AuthInterceptor implements HttpInterceptor {
         },
       });
     }
-    return next.handle(request);
+    // Gérer la réponse ET les erreurs
+    return next.handle(request).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // Token expiré ou invalide
+          console.log('Token expiré - déconnexion automatique');
+          localStorage.removeItem('token');
+          this.router.navigate(['/login']); // Rediriger vers login
+        }
+
+        throw error;
+      })
+    );
   }
 }

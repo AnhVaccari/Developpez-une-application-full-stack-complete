@@ -20,6 +20,7 @@ const routes: Routes = [
   { path: 'create-post', component: CreatePostComponent },
   { path: 'profile', component: UserProfileComponent },
   { path: 'posts/:id', component: PostDetailComponent },
+  { path: '**', redirectTo: '/login' },
 ];
 
 @NgModule({
