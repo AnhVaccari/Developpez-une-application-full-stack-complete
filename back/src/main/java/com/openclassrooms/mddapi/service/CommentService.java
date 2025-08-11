@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.openclassrooms.mddapi.dto.CommentRequest;
 import com.openclassrooms.mddapi.dto.CommentResponse;
 import com.openclassrooms.mddapi.model.Comment;
@@ -13,6 +15,7 @@ import com.openclassrooms.mddapi.repository.CommentRepository;
 import com.openclassrooms.mddapi.repository.PostRepository;
 
 @Service
+@Transactional
 public class CommentService {
 
     @Autowired
@@ -21,28 +24,42 @@ public class CommentService {
     @Autowired
     private PostRepository postRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     public CommentResponse createComment(CommentRequest request, User user) {
-        // Mapping manuel
         Comment comment = new Comment();
         comment.setContent(request.getContent());
         comment.setPost(postRepository.findById(request.getPostId())
                 .orElseThrow(() -> new RuntimeException("Post not found")));
-        comment.setUser(user); // utilisateur connecté
+        comment.setUser(user);
 
-        // Sauvegarder
         Comment savedComment = commentRepository.save(comment);
 
-        // ModelMapper pour la réponse
-        return modelMapper.map(savedComment, CommentResponse.class);
+        // MAPPING MANUEL au lieu de ModelMapper
+        CommentResponse response = new CommentResponse();
+        response.setId(savedComment.getId());
+        response.setContent(savedComment.getContent());
+        response.setUserId(savedComment.getUser().getId());
+        response.setPostId(savedComment.getPost().getId());
+        response.setCreatedAt(savedComment.getCreatedAt());
+        response.setUpdatedAt(savedComment.getUpdatedAt());
+        response.setAuthorUsername(savedComment.getUser().getUsername());
+
+        return response;
     }
 
     public List<CommentResponse> getCommentsByPostId(Long postId) {
         List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtAsc(postId);
         return comments.stream()
-                .map(comment -> modelMapper.map(comment, CommentResponse.class))
+                .map(comment -> {
+                    CommentResponse response = new CommentResponse();
+                    response.setId(comment.getId());
+                    response.setContent(comment.getContent());
+                    response.setUserId(comment.getUser().getId());
+                    response.setPostId(comment.getPost().getId());
+                    response.setCreatedAt(comment.getCreatedAt());
+                    response.setUpdatedAt(comment.getUpdatedAt());
+                    response.setAuthorUsername(comment.getUser().getUsername());
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
 
