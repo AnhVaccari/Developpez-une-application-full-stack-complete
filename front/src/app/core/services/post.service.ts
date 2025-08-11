@@ -14,7 +14,7 @@ export class PostService {
     return this.apiService.get<Post[]>('/posts/feed');
   }
 
-  // Post spécifique
+  // Voir un post spécifique
   getPost(id: number): Observable<Post> {
     return this.apiService.get<Post>(`/posts/${id}`);
   }
