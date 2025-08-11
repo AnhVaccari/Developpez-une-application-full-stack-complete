@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PostService } from 'src/app/core/services/post.service';
+import { Post } from 'src/app/shared/models/post.model';
 
 @Component({
   selector: 'app-posts',
@@ -6,35 +8,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./posts.component.scss'],
 })
 export class PostsComponent implements OnInit {
+  posts: Post[] = [];
   loading: boolean = false;
 
-  posts = [
-    {
-      name: "Titre de l'article",
+  constructor(private postService: PostService) {}
 
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: "Titre de l'article",
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: "Titre de l'article",
+  ngOnInit(): void {
+    this.loadPosts();
+  }
 
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-    {
-      name: "Titre de l'article",
-
-      description:
-        'Alii summum decus in carruchis solito altioribus et ambitioso vestium cultu ponentes sudant sub ponderibus lacernarum, quas in collis insertas cingulis ipsis adnectunt nimia subtegminum tenuitate perflabiles, expandentes eas crebris agitationibus maximeque sinistra, ut longiores fimbriae tunicaeque perspicue luceant varietate liciorum effigiatae in species animalium multiformes.',
-    },
-  ];
-
-  constructor() {}
-
-  ngOnInit(): void {}
+  loadPosts(): void {
+    this.loading = true;
+    this.postService.getUserFeed().subscribe({
+      next: (posts) => {
+        this.posts = posts;
+        this.loading = false;
+        console.log('Posts loaded:', posts);
+      },
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.loading = false;
+      },
+    });
+  }
 }
