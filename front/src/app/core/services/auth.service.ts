@@ -6,7 +6,7 @@ import {
   AuthResponse,
   LoginRequest,
   User,
-} from 'src/app/shared/models/auth.models';
+} from 'src/app/shared/models/auth.model';
 
 @Injectable({
   providedIn: 'root',

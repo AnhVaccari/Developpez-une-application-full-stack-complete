@@ -22,7 +22,7 @@
 .article-meta {
   display: flex;
   gap: 2rem;
-  margin-left: 4rem; /* aligner avec le titre */
+  margin-left: 4rem;
   margin-bottom: 2rem;
   color: #666;
 }
@@ -72,16 +72,19 @@
 
 .comment-form {
   display: flex;
+  align-items: flex-end;
   gap: 1rem;
-  margin-top: 2rem;
+
 }
 
 .comment-input {
   flex: 1;
 }
 
+
 .send-button {
   background: #7832f1;
+
 }
 
 

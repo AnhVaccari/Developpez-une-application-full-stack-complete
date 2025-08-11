@@ -1,55 +1,60 @@
 <app-navbar-connected></app-navbar-connected>
 
-<div class="article-container">
-  <!-- Header avec flèche et titre -->
+<div *ngIf="loading" class="loading">
+  <mat-spinner></mat-spinner>
+  <p>Chargement de l'article...</p>
+</div>
+
+<div *ngIf="post" class="article-container">
   <div class="article-header">
     <button mat-icon-button class="back-button" routerLink="/posts">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <h1 class="article-title">Titre de l'article sélectionné</h1>
+    <h1 class="article-title">{{ post.title }}</h1>
   </div>
 
-  <!-- Métadonnées -->
   <div class="article-meta">
-    <span>Date</span>
-    <span>Auteur</span>
-    <span>Thème</span>
+    <span>{{ post.createdAt | date : "short" }}</span>
+    <span>{{ post.authorUsername }}</span>
+    <span>{{ post.topicName }}</span>
   </div>
 
-  <!-- Contenu article -->
   <div class="article-content">
-    <p class="content-text">
-      Content: lorem ipsum is simply dummy text of the printing and typesetting
-      industry...
-    </p>
+    <p class="content-text">{{ post.content }}</p>
   </div>
 
   <hr class="separator" />
 
-  <!-- Section commentaires -->
   <div class="comments-section">
-    <h2>Commentaires</h2>
+    <h2>Commentaires ({{ comments.length }})</h2>
 
-    <!-- Liste des commentaires existants -->
-    <div class="comments-list">
-      <div class="comment">
-        <div class="comment-username">username</div>
-        <mat-card class="comment-card">
-          <mat-card-content> contenu du commentaire </mat-card-content>
-        </mat-card>
-      </div>
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-username">{{ comment.authorUsername }}</div>
+      <mat-card class="comment-card">
+        <mat-card-content>{{ comment.content }}</mat-card-content>
+        <small>{{ comment.createdAt | date : "short" }}</small>
+      </mat-card>
     </div>
 
-    <!-- Formulaire commentaire -->
+    <div *ngIf="comments.length === 0" class="no-comments">
+      <p>Aucun commentaire pour le moment.</p>
+    </div>
+
     <div class="comment-form">
       <mat-form-field appearance="outline" class="comment-input">
         <textarea
           matInput
           placeholder="Écrivez ici votre commentaire"
           rows="2"
+          formControlName="content"
         ></textarea>
       </mat-form-field>
-      <button mat-fab class="send-button">
+      <button
+        mat-fab
+        class="send-button"
+        (click)="addComment()"
+        [disabled]="commentForm.invalid"
+      >
         <mat-icon>send</mat-icon>
       </button>
     </div>

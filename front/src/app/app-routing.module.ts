@@ -19,7 +19,7 @@ const routes: Routes = [
   { path: 'posts', component: PostsComponent },
   { path: 'create-post', component: CreatePostComponent },
   { path: 'profile', component: UserProfileComponent },
-  { path: 'posts/:id', component: PostDetailComponent },
+  { path: 'post-detail/:id', component: PostDetailComponent },
   { path: '**', redirectTo: '/login' },
 ];
 

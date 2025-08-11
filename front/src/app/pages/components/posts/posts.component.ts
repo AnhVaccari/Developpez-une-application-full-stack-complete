@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { PostService } from 'src/app/core/services/post.service';
 import { Post } from 'src/app/shared/models/post.model';
 
@@ -11,7 +12,7 @@ export class PostsComponent implements OnInit {
   posts: Post[] = [];
   loading: boolean = false;
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -30,5 +31,9 @@ export class PostsComponent implements OnInit {
         this.loading = false;
       },
     });
+  }
+
+  goToPostDetail(postId: number): void {
+    this.router.navigate(['/post-detail', postId]);
   }
 }
