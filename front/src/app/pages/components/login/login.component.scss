@@ -26,7 +26,7 @@
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 32px;
   font-weight: normal;
 }
 
@@ -85,10 +85,24 @@
     display: none;
   }
 
-
-
-  .header {
+ .header {
     padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+   .header .back-button {
+    position: relative;
+    transform: none;
+    left: auto;
+  }
+
+   .header h1 {
+    font-size: 32px;
+    align-self: center;
+    position: relative;
+    transform: none;
+    left: auto;
   }
 
 
@@ -97,16 +111,12 @@
     max-width: 80%;
   }
 
-  .header h1 {
-    font-size: 2rem;
-  }
-
   .form-group {
-     font-size:1.5rem;
+     font-size: 24px;
   }
 
   .btn-primary {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 }
 

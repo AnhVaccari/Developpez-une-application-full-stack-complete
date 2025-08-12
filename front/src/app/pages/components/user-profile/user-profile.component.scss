@@ -25,7 +25,7 @@
   left: 50%;
   transform: translateX(-50%);
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: normal;
 }
 
@@ -87,18 +87,18 @@
 .separator {
   border: none;
   border-top: 1px solid #434141;
-  margin: 2rem auto;
+  margin: 32px auto;
   width: 80%;
 }
 
 .subscriptions-section {
-  padding: 0 1.5rem;
+  padding: 0 24px;
 }
 
 .subscriptions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
+  gap: 16px;
 }
 
 .subscriptions-title {
@@ -140,15 +140,15 @@ mat-card-actions {
   }
 
   .header h1 {
-    font-size: 2rem;
+    font-size: 32px;
   }
 
   .form-group {
-     font-size:1.5rem;
+     font-size: 24px;
   }
 
   .btn-primary {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 
   .subscriptions-grid {
