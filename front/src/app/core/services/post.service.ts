@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
 import { Post } from 'src/app/shared/models/post.model';
-import { CommentRequest } from 'src/app/shared/models/comment.model';
+import {
+  CommentRequest,
+  PostWithCommentsResponse,
+} from 'src/app/shared/models/comment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,8 +19,8 @@ export class PostService {
   }
 
   // Voir un post spécifique
-  getPost(id: number): Observable<Post> {
-    return this.apiService.get<Post>(`/posts/${id}`);
+  getPost(id: number): Observable<PostWithCommentsResponse> {
+    return this.apiService.get<PostWithCommentsResponse>(`/posts/${id}`);
   }
 
   // Créer un post

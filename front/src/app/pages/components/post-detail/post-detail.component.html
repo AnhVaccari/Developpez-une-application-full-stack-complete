@@ -46,14 +46,14 @@
           matInput
           placeholder="Écrivez ici votre commentaire"
           rows="2"
-          formControlName="content"
+          [(ngModel)]="commentText"
         ></textarea>
       </mat-form-field>
       <button
         mat-fab
         class="send-button"
         (click)="addComment()"
-        [disabled]="commentForm.invalid"
+        [disabled]="!commentText || commentText.trim().length < 3"
       >
         <mat-icon>send</mat-icon>
       </button>

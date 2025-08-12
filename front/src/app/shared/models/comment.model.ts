@@ -1,3 +1,5 @@
+import { Post } from './post.model';
+
 export interface Comment {
   id: number;
   content: string;
@@ -10,4 +12,10 @@ export interface Comment {
 
 export interface CommentRequest {
   content: string;
+}
+
+export interface PostWithCommentsResponse {
+  post: Post;
+  comments: Comment[];
+  commentCount: number;
 }

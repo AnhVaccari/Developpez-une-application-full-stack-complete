@@ -11,7 +11,13 @@
     <div class="form-group">
       <label for="email" class="form-label">Adresse e-mail</label>
       <mat-form-field appearance="outline" class="full-width">
-        <input matInput id="email" formControlName="email" required />
+        <input
+          matInput
+          id="email"
+          type="email"
+          formControlName="email"
+          required
+        />
         <mat-error
           *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
         >
@@ -23,7 +29,13 @@
     <div class="form-group">
       <label for="password" class="form-label">Mot de passe</label>
       <mat-form-field appearance="outline" class="full-width">
-        <input matInput id="password" formControlName="password" required />
+        <input
+          matInput
+          id="password"
+          type="password"
+          formControlName="password"
+          required
+        />
         <mat-error
           *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
         >

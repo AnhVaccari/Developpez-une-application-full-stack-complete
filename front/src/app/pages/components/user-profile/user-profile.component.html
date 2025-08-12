@@ -4,7 +4,12 @@
   <h1>Profil utilisateur</h1>
 </div>
 <div class="profile-container">
-  <form [formGroup]="form" class="profile-form" novalidate>
+  <form
+    [formGroup]="form"
+    class="profile-form"
+    novalidate
+    (ngSubmit)="onSubmit()"
+  >
     <div class="form-group">
       <label for="username" class="form-label"></label>
       <mat-form-field appearance="outline" class="full-width">
@@ -29,6 +34,7 @@
         <input
           matInput
           id="email"
+          type="email"
           formControlName="email"
           required
           placeholder="email@email.fr"
@@ -47,14 +53,21 @@
         <input
           matInput
           id="password"
+          type="password"
           formControlName="password"
           required
-          placeholder="Mot de passe"
+          placeholder="Nouveau mot de passe (laissez vide pour ne pas changer)"
         />
-        <mat-error
-          *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+        <mat-hint
+          >8 caractères min avec majuscule, chiffre et caractère
+          spécial</mat-hint
         >
-          Mot de passe requis
+        <mat-error *ngIf="form.get('password')?.hasError('minLength')">
+          Le mot de passe doit contenir au moins 8 caractères
+        </mat-error>
+        <mat-error *ngIf="form.get('password')?.hasError('pattern')">
+          Le mot de passe doit contenir : majuscule, minuscule, chiffre et
+          caractère spécial
         </mat-error>
       </mat-form-field>
     </div>
@@ -84,7 +97,13 @@
         <p>{{ theme.description }}</p>
       </mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button class="unsubscribe-btn">Se désabonner</button>
+        <button
+          mat-raised-button
+          class="unsubscribe-btn"
+          (click)="unsubscribe(theme)"
+        >
+          Se désabonner
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

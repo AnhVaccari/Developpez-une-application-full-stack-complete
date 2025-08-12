@@ -11,7 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { LoginComponent } from './pages/components/login/login.component';
 import { RegisterComponent } from './pages/components/register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/components/home/home.component';
 import {
   MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -58,6 +58,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatSelectModule,
     MatSnackBarModule,
+    FormsModule,
     ReactiveFormsModule,
   ],
   providers: [

@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from 'src/app/core/services/post.service';
-import { Comment, CommentRequest } from 'src/app/shared/models/comment.model';
+import {
+  Comment,
+  CommentRequest,
+  PostWithCommentsResponse,
+} from 'src/app/shared/models/comment.model';
 import { Post } from 'src/app/shared/models/post.model';
 
 @Component({
@@ -15,61 +19,52 @@ export class PostDetailComponent implements OnInit {
   comments: Comment[] = [];
   loading: boolean = true;
   postId: number = 0;
-
-  public commentForm = this.fb.group({
-    content: ['', [Validators.required, Validators.minLength(3)]],
-  });
+  commentText: string = '';
 
   constructor(
     private route: ActivatedRoute,
-    private postService: PostService,
-    private fb: FormBuilder
+    private postService: PostService
   ) {}
 
   ngOnInit(): void {
     this.postId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('Post ID:', this.postId);
 
     this.loadPost();
   }
 
   loadPost(): void {
-    console.log('🔍 Début loadPost, ID:', this.postId);
     this.postService.getPost(this.postId).subscribe({
-      next: (response: any) => {
-        // Changez le type temporairement
-        console.log(' Réponse complète:', response);
-
+      next: (response: PostWithCommentsResponse) => {
         // Extraire le post de la réponse
-        this.post = response.post; // ← Changement ici !
-        this.comments = response.comments || []; // Récupérer aussi les commentaires
-        this.loading = false;
+        this.post = response.post;
 
-        console.log('📊 Post extrait:', this.post);
-        console.log('📊 Commentaires extraits:', this.comments);
+        // Récupérer aussi les commentaires
+        this.comments = response.comments || [];
+        this.loading = false;
       },
       error: (error) => {
-        console.error('Erreur chargement post:', error);
         this.loading = false;
       },
     });
   }
 
   addComment(): void {
-    if (this.commentForm.valid && this.commentForm.value.content) {
-      const commentData: CommentRequest = {
-        content: this.commentForm.value.content, // On sait qu'il existe car form.valid
+    if (this.commentText.trim().length >= 3) {
+      const commentData = {
+        content: this.commentText,
+        postId: this.postId,
       };
-
-      console.log('Ajout commentaire:', commentData);
 
       this.postService.addComment(this.postId, commentData).subscribe({
         next: (response) => {
-          console.log('Commentaire ajouté:', response);
-          this.commentForm.reset();
+          // Vider le champ
+          this.commentText = '';
+
+          // Recharger pour voir le nouveau commentaire
+          this.loadPost();
         },
         error: (error) => {
-          console.error('Erreur ajout commentaire:', error);
+          console.error('Erreur:', error);
         },
       });
     }
