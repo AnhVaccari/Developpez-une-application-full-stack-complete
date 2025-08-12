@@ -31,7 +31,6 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           // Token expiré ou invalide
-          console.log('Token expiré - déconnexion automatique');
           localStorage.removeItem('token');
           this.router.navigate(['/login']);
         }

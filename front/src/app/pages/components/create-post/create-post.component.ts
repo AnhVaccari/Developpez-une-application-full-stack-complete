@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { PostService } from 'src/app/core/services/post.service';
 import { TopicService } from 'src/app/core/services/topic.service';
@@ -26,7 +27,8 @@ export class CreatePostComponent implements OnInit {
     private fb: FormBuilder,
     private postService: PostService,
     private topicService: TopicService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -37,10 +39,11 @@ export class CreatePostComponent implements OnInit {
     this.topicService.getAllTopics().subscribe({
       next: (topics) => {
         this.topics = topics;
-        console.log('Topics chargés:', topics);
       },
-      error: (error) => {
-        console.error('Erreur chargement topics:', error);
+      error: () => {
+        this.snackBar.open('Erreur lors du chargement des sujets', 'Fermer', {
+          duration: 3000,
+        });
       },
     });
   }
@@ -52,15 +55,18 @@ export class CreatePostComponent implements OnInit {
         topicId: Number(this.postForm.value.topicId), // Convertir en nombre
       };
 
-      console.log('Données envoyées:', postData);
-
       this.postService.createPost(postData).subscribe({
-        next: (response) => {
-          console.log('Post créé:', response);
+        next: () => {
           this.router.navigate(['/posts']);
+          this.snackBar.open('Post créé avec succès !', 'Fermer', {
+            duration: 3000,
+          });
         },
         error: (error) => {
           console.error('Erreur création:', error);
+          this.snackBar.open('Erreur lors de la création du post', 'Fermer', {
+            duration: 3000,
+          });
         },
       });
     }

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from 'src/app/core/services/post.service';
 import {
   Comment,
-  CommentRequest,
   PostWithCommentsResponse,
 } from 'src/app/shared/models/comment.model';
 import { Post } from 'src/app/shared/models/post.model';
@@ -23,7 +23,8 @@ export class PostDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private postService: PostService
+    private postService: PostService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ export class PostDetailComponent implements OnInit {
         this.comments = response.comments || [];
         this.loading = false;
       },
-      error: (error) => {
+      error: () => {
         this.loading = false;
       },
     });
@@ -56,7 +57,7 @@ export class PostDetailComponent implements OnInit {
       };
 
       this.postService.addComment(this.postId, commentData).subscribe({
-        next: (response) => {
+        next: () => {
           // Vider le champ
           this.commentText = '';
 
@@ -65,6 +66,13 @@ export class PostDetailComponent implements OnInit {
         },
         error: (error) => {
           console.error('Erreur:', error);
+          this.snackBar.open(
+            'Erreur lors de l' + 'ajout du commentaire',
+            'Fermer',
+            {
+              duration: 3000,
+            }
+          );
         },
       });
     }

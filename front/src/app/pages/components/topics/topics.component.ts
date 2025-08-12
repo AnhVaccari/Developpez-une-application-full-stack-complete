@@ -30,9 +30,6 @@ export class TopicsComponent implements OnInit {
       subscriptions: this.topicService.getUserSubscriptions(),
     }).subscribe({
       next: ({ topics, subscriptions }) => {
-        console.log('Topics:', topics);
-        console.log('Subscriptions:', subscriptions);
-
         // Créer un Set des IDs auxquels l'utilisateur est abonné
         const subscribedIds = new Set(subscriptions.map((sub) => sub.id));
 
@@ -42,21 +39,16 @@ export class TopicsComponent implements OnInit {
         }));
 
         this.loading = false;
-        console.log('Topics avec statut:', this.topics);
       },
-      error: (error) => {
-        console.error('Erreur:', error);
+      error: () => {
         this.loading = false;
       },
     });
   }
 
   subscribe(topic: Topic): void {
-    console.log('Abonnement au topic:', topic);
-
     this.topicService.subscribe(topic.id).subscribe({
       next: (response) => {
-        console.log('Abonnement réussi:', response);
         // Mettre à jour l'état local
         topic.isSubscribed = true;
         this.snackBar.open(`Abonné à ${topic.name} !`, 'Fermer', {
@@ -67,12 +59,11 @@ export class TopicsComponent implements OnInit {
         if (error.status === 400) {
           // Déjà abonné
           topic.isSubscribed = true;
-          console.log('Utilisateur déjà abonné');
+
           this.snackBar.open('Vous êtes déjà abonné !', 'Fermer', {
             duration: 3000,
           });
         } else {
-          console.error('Erreur abonnement:', error);
           this.snackBar.open("Erreur lors de l'abonnement", 'Fermer', {
             duration: 3000,
           });
@@ -82,21 +73,17 @@ export class TopicsComponent implements OnInit {
   }
 
   unsubscribe(topic: Topic): void {
-    console.log('Désabonnement du topic:', topic);
-
     this.topicService.unsubscribe(topic.id).subscribe({
       next: (response) => {
-        console.log('Désabonnement réussi:', response);
         // Mettre à jour l'état local
         topic.isSubscribed = false;
         this.snackBar.open(`Désabonné de ${topic.name}`, 'Fermer', {
           duration: 3000,
         });
       },
-      error: (error) => {
-        console.error('Erreur désabonnement:', error);
+      error: () => {
         // Même en cas d'erreur, on recharge pour vérifier le vrai état
-        this.loadTopics(); // Recharge tout depuis la BDD
+        this.loadTopics();
         this.snackBar.open('Action effectuéee', 'Fermer', {
           duration: 2000,
         });

@@ -32,15 +32,12 @@ export class LoginComponent implements OnInit {
     }
 
     const loginRequest: LoginRequest = this.form.getRawValue();
-    console.log('Tentative de login avec:', loginRequest); // Debug
 
     this.authService.login(loginRequest).subscribe({
-      next: (response: AuthResponse) => {
-        console.log('Login réussi, redirection...'); // Debug
-        this.router.navigate(['/topics']); // Le token est déjà stocké dans le service
+      next: () => {
+        this.router.navigate(['/topics']);
       },
-      error: (error) => {
-        console.error('Erreur login:', error); // Debug
+      error: () => {
         this.errorMessage = 'Email or password is incorrect';
       },
     });

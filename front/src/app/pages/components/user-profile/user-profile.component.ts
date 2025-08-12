@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TopicService } from 'src/app/core/services/topic.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -28,7 +29,8 @@ export class UserProfileComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private userService: UserService,
-    private topicService: TopicService
+    private topicService: TopicService,
+    private snackBar: MatSnackBar
   ) {
     this.form.get('password')?.valueChanges.subscribe((value) => {
       this.updatePasswordValidation(value);
@@ -72,8 +74,7 @@ export class UserProfileComponent implements OnInit {
         this.subscribedThemes = profile.subscriptions || [];
         this.loading = false;
       },
-      error: (error: any) => {
-        console.error('Erreur chargement profil:', error);
+      error: () => {
         this.loading = false;
       },
     });
@@ -93,11 +94,15 @@ export class UserProfileComponent implements OnInit {
           this.form.patchValue({ password: '' });
           this.form.markAsPristine();
 
-          alert('Profil mis à jour avec succès !');
+          this.snackBar.open('Profil mis à jour avec succès !', 'Fermer', {
+            duration: 3000,
+          });
         },
-        error: (error) => {
-          console.error(' Erreur:', error);
+        error: () => {
           this.errorMessage = 'Erreur lors de la mise à jour du profil';
+          this.snackBar.open(this.errorMessage, 'Fermer', {
+            duration: 3000,
+          });
         },
       });
     }
@@ -109,16 +114,30 @@ export class UserProfileComponent implements OnInit {
         this.subscribedThemes = this.subscribedThemes.filter(
           (t) => t.id !== theme.id
         );
-        alert(`Vous êtes maintenant désabonné de ${theme.name}`);
+        this.snackBar.open(
+          `Vous êtes maintenant désabonné de ${theme.name}`,
+          'Fermer',
+          {
+            duration: 3000,
+          }
+        );
       },
       error: (error) => {
         if (error.status === 204 || error.status === 200) {
           this.subscribedThemes = this.subscribedThemes.filter(
             (t) => t.id !== theme.id
           );
-          alert(`Vous êtes maintenant désabonné de ${theme.name}`);
+          this.snackBar.open(
+            `Vous êtes maintenant désabonné de ${theme.name}`,
+            'Fermer',
+            {
+              duration: 3000,
+            }
+          );
         } else {
-          alert('Erreur lors du désabonnement');
+          this.snackBar.open('Erreur lors du désabonnement', 'Fermer', {
+            duration: 3000,
+          });
         }
       },
     });

@@ -24,10 +24,8 @@ export class PostsComponent implements OnInit {
       next: (posts) => {
         this.posts = posts;
         this.loading = false;
-        console.log('Posts loaded:', posts);
       },
-      error: (error) => {
-        console.error('Error loading posts:', error);
+      error: () => {
         this.loading = false;
       },
     });
