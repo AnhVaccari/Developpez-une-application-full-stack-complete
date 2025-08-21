@@ -49,7 +49,7 @@ CREATE DATABASE mdd_db;
 ### 3. Installation du Backend
 ```bash
 cd back
-./mvnw clean install
+mvn clean install
 ```
 
 ### 4. Installation du Frontend
@@ -63,7 +63,7 @@ npm install
 ### 1. Démarrer le Backend
 ```bash
 cd back
-./mvnw spring-boot:run
+mvn spring-boot:run
 ```
 Le backend sera accessible sur `http://localhost:8080`
 
