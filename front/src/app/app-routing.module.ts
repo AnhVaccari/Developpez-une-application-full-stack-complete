@@ -1,10 +1,27 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
+import { TopicsComponent } from './pages/components/topics/topics.component';
+import { LoginComponent } from './pages/components/login/login.component';
+import { RegisterComponent } from './pages/components/register/register.component';
+import { HomeComponent } from './pages/components/home/home.component';
+import { PostsComponent } from './pages/components/posts/posts.component';
+import { CreatePostComponent } from './pages/components/create-post/create-post.component';
+import { UserProfileComponent } from './pages/components/user-profile/user-profile.component';
+import { PostDetailComponent } from './pages/components/post-detail/post-detail.component';
 
 // consider a guard combined with canLoad / canActivate route option
 // to manage unauthenticated user to access private routes
-const routes: Routes = [{ path: '', component: HomeComponent }];
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'topics', component: TopicsComponent },
+  { path: 'posts', component: PostsComponent },
+  { path: 'create-post', component: CreatePostComponent },
+  { path: 'profile', component: UserProfileComponent },
+  { path: 'post-detail/:id', component: PostDetailComponent },
+  { path: '**', redirectTo: '/login' },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

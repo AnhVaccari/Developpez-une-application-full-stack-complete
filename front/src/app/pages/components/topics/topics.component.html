@@ -1,0 +1,35 @@
+<app-navbar-connected></app-navbar-connected>
+
+<div class="topics-container">
+  <!-- Spinner de chargement -->
+  <div *ngIf="loading" class="loading">
+    <mat-spinner></mat-spinner>
+    <p>Chargement des thèmes...</p>
+  </div>
+
+  <!-- Liste des topics -->
+  <div *ngIf="!loading && topics.length > 0" class="topics-grid">
+    <mat-card *ngFor="let topic of topics" class="topic-card">
+      <mat-card-header>
+        <mat-card-title>{{ topic.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ topic.description }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          [class.subscribed]="topic.isSubscribed"
+          (click)="topic.isSubscribed ? unsubscribe(topic) : subscribe(topic)"
+        >
+          {{ topic.isSubscribed ? "Se désabonner" : "S'abonner" }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Message si aucun topic -->
+  <div *ngIf="!loading && topics.length === 0" class="no-topics">
+    <p>Aucun thème disponible</p>
+  </div>
+</div>

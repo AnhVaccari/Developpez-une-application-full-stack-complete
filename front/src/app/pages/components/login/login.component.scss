@@ -1,0 +1,124 @@
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  position: relative;
+  margin-top: 30px;
+}
+
+.mat-tab-nav-bar img {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  margin-right: auto;
+}
+
+
+.header .back-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50px);
+}
+
+.header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 32px;
+  font-weight: normal;
+}
+
+.login-container {
+  padding: 40px 20px;
+  max-width: 450px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.form-label {
+  display: block !important;
+  text-align: left !important;
+  font-weight: normal;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.btn-primary {
+  background-color: #7832f1 !important;
+  color: white !important;
+  font-size: 16px;
+  display: block;
+  margin: 0 auto;
+
+}
+
+
+/* Style des champs Material */
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  stroke: #ccc !important;
+  opacity: 1 !important;
+}
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  stroke: #7832f1 !important;
+  opacity: 1 !important;
+}
+
+.mat-icon {
+  cursor: pointer;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+  app-navbar {
+    display: none;
+  }
+
+ .header {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+   .header .back-button {
+    position: relative;
+    transform: none;
+    left: auto;
+  }
+
+   .header h1 {
+    font-size: 32px;
+    align-self: center;
+    position: relative;
+    transform: none;
+    left: auto;
+  }
+
+
+  .login-container {
+    margin-top: 50px;
+    max-width: 80%;
+  }
+
+  .form-group {
+     font-size: 24px;
+  }
+
+  .btn-primary {
+    font-size: 24px;
+  }
+}
+
+
+

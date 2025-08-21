@@ -1,0 +1,62 @@
+<app-navbar-connected></app-navbar-connected>
+
+<div *ngIf="loading" class="loading">
+  <mat-spinner></mat-spinner>
+  <p>Chargement de l'article...</p>
+</div>
+
+<div *ngIf="post" class="article-container">
+  <div class="article-header">
+    <button mat-icon-button class="back-button" routerLink="/posts">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h1 class="article-title">{{ post.title }}</h1>
+  </div>
+
+  <div class="article-meta">
+    <span>{{ post.createdAt | date : "dd MMMM yyyy, HH:mm" }}</span>
+    <span>{{ post.authorUsername }}</span>
+    <span>{{ post.topicName }}</span>
+  </div>
+
+  <div class="article-content">
+    <p class="content-text">{{ post.content }}</p>
+  </div>
+
+  <hr class="separator" />
+
+  <div class="comments-section">
+    <h2>Commentaires ({{ comments.length }})</h2>
+
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-username">{{ comment.authorUsername }}</div>
+      <mat-card class="comment-card">
+        <mat-card-content>{{ comment.content }}</mat-card-content>
+        <small>{{ comment.createdAt | date : "dd MMMM yyyy, HH:mm" }}</small>
+      </mat-card>
+    </div>
+
+    <div *ngIf="comments.length === 0" class="no-comments">
+      <p>Aucun commentaire pour le moment.</p>
+    </div>
+
+    <div class="comment-form">
+      <mat-form-field appearance="outline" class="comment-input">
+        <textarea
+          matInput
+          placeholder="Écrivez ici votre commentaire"
+          rows="2"
+          [(ngModel)]="commentText"
+        ></textarea>
+      </mat-form-field>
+      <button
+        mat-fab
+        class="send-button"
+        (click)="addComment()"
+        [disabled]="!commentText || commentText.trim().length < 3"
+      >
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px;
+  margin-top: 30px;
+}
+
+.topic-card {
+  max-width: 100%;
+  background-color: rgb(252, 249, 249);
+}
+
+.mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-card-actions button {
+  background-color: #7832f1;
+  color: white;
+}
+
+.mat-card-actions button.subscribed {
+  background-color: #ccc;
+  color: #666;
+}
+
+.mat-card-actions button:disabled {
+  background-color: #ccc !important;
+  color: #666 !important;
+}
+
+@media (max-width: 768px) {
+  .topics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+

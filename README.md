@@ -1,25 +1,106 @@
-# P6-Full-Stack-reseau-dev
+# MDD - Monde de Dév
 
-## Front
+## Description
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.3.
+MDD (Monde de Dév) est un réseau social dédié aux développeurs. Cette application permet aux développeurs de :
+- S'abonner à des thèmes de programmation (JavaScript, Java, Python, Web3, etc.)
+- Consulter un fil d'actualité personnalisé
+- Créer et publier des articles
+- Commenter les articles
+- Gérer leur profil utilisateur
 
-Don't forget to install your node_modules before starting (`npm install`).
+## Technologies utilisées
 
-### Development server
+### Backend
+- **Java 17**
+- **Spring Boot** (Spring Security, Spring Data JPA)
+- **MySQL** 8.0
+- **JWT** pour l'authentification
+- **Maven** pour la gestion des dépendances
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Frontend
+- **Angular 14.1.3**
+- **TypeScript**
+- **Angular Material** pour l'interface utilisateur
+- **Node.js** et **npm**
 
-### Build
+## Prérequis
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Avant d'installer l'application, assurez-vous d'avoir :
+- **Java 17** ou supérieur
+- **Node.js 16** ou supérieur
+- **MySQL 8.0** ou supérieur
+- **Git**
 
-### Where to start
+## Installation
 
-As you may have seen if you already started the app, a simple home page containing a logo, a title and a button is available. If you take a look at its code (in the `home.component.html`) you will see that an external UI library is already configured in the project.
+### 1. Cloner le repository
+```bash
+git clone https://github.com/AnhVaccari/Developpez-une-application-full-stack-complete.git
+cd P6-Full-Stack-reseau-dev
+```
 
-This library is `@angular/material`, it's one of the most famous in the angular ecosystem. As you can see on their docs (https://material.angular.io/), it contains a lot of highly customizable components that will help you design your interfaces quickly.
+### 2. Configuration de la base de données
+Créer une base de données MySQL :
+```sql
+CREATE DATABASE mdd_db;
+```
 
-Note: I recommend to use material however it's not mandatory, if you prefer you can get rid of it.
+### 3. Installation du Backend
+```bash
+cd back
+mvn clean install
+```
 
-Good luck!
+### 4. Installation du Frontend
+```bash
+cd front
+npm install
+```
+
+## Lancement de l'application
+
+### 1. Démarrer le Backend
+```bash
+cd back
+mvn spring-boot:run
+```
+Le backend sera accessible sur `http://localhost:8080`
+
+### 2. Démarrer le Frontend
+```bash
+cd front
+ng serve
+```
+Le frontend sera accessible sur `http://localhost:4200`
+
+## Fonctionnalités
+
+### Authentification
+- Inscription avec email, nom d'utilisateur et mot de passe
+- Connexion avec email et mot de passe
+- Persistance de la session avec JWT
+
+### Gestion des utilisateurs
+- Consultation du profil utilisateur
+- Modification du profil (email, nom d'utilisateur, mot de passe)
+
+### Gestion des abonnements
+- Consultation de tous les thèmes disponibles
+- Abonnement/désabonnement aux thèmes
+
+### Gestion des articles
+- Fil d'actualité chronologique personnalisé
+- Création d'articles avec choix du thème
+- Consultation détaillée des articles
+- Système de commentaires
+
+## Architecture
+
+L'application suit une architecture en couches :
+- **Controller** : Gestion des endpoints REST
+- **Service** : Logique métier
+- **Repository** : Accès aux données
+
+La sécurité est assurée par Spring Security avec JWT pour l'authentification stateless.
+
