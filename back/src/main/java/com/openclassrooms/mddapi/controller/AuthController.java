@@ -22,6 +22,13 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Endpoint d'inscription d'un nouvel utilisateur
+     * 
+     * @param registerRequest contient email, username et password
+     * @return UserResponse avec les infos de l'utilisateur créé
+     */
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
@@ -34,6 +41,12 @@ public class AuthController {
         }
     }
 
+    /**
+     * Endpoint de connexion
+     * 
+     * @param loginRequest données de connexion
+     * @return token JWT et infos utilisateur
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         try {

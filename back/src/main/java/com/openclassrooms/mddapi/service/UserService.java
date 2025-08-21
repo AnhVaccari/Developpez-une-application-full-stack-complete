@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.openclassrooms.mddapi.dto.LoginRequest;
@@ -47,6 +48,13 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    /**
+     * Inscrit un nouvel utilisateur avec hachage du mot de passe
+     * 
+     * @param request contient email, username et password
+     * @return UserResponse avec les infos du nouvel utilisateur créé
+     * @throws RuntimeException si l'email existe déjà en base
+     */
     public UserResponse register(RegisterRequest request) {
 
         // Vérifier existence de l'utilisateur
@@ -68,6 +76,13 @@ public class UserService {
         return modelMapper.map(savedUser, UserResponse.class);
     }
 
+    /**
+     * Authentifie un utilisateur avec email et mot de passe
+     * 
+     * @param loginRequest contient l'email et le mot de passe
+     * @return LoginResponse avec le token JWT et les infos utilisateur
+     * @throws RuntimeException si les identifiants sont incorrects
+     */
     public LoginResponse login(LoginRequest request) {
 
         // Trouver l'utilisateur
@@ -98,6 +113,15 @@ public class UserService {
 
     }
 
+    /**
+     * Récupère le profil complet d'un utilisateur avec ses abonnements
+     * 
+     * @param userId identifiant de l'utilisateur
+     * @return UserProfileResponse avec les données du profil et la liste des thèmes
+     *         suivis
+     * @throws RuntimeException si l'utilisateur n'existe pas
+     */
+
     public UserProfileResponse getUserProfile(Long userId) {
         // Récupérer l'utilisateur
         Optional<User> userOpt = userRepository.findById(userId);
@@ -127,6 +151,15 @@ public class UserService {
         return profile;
     }
 
+    /**
+     * Met à jour le profil d'un utilisateur (email, username, password)
+     * 
+     * @param userId  identifiant de l'utilisateur à modifier
+     * @param request nouvelles données du profil (seuls les champs non-null sont
+     *                mis à jour)
+     * @return UserResponse avec les données mises à jour
+     * @throws RuntimeException si l'utilisateur n'existe pas
+     */
     public UserResponse updateProfile(Long userId, UpdateProfileRequest request) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
