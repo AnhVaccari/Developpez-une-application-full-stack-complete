@@ -30,7 +30,8 @@
       </mat-card-header>
       <div class="subtitle-container">
         <mat-card-subtitle
-          >Date : {{ post.createdAt | date : "short" }}</mat-card-subtitle
+          >Date :
+          {{ post.createdAt | date : "dd MMMM yyyy, HH:mm" }}</mat-card-subtitle
         >
         <mat-card-subtitle
           >Auteur : {{ post.authorUsername }}</mat-card-subtitle
