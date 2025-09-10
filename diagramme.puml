@@ -1,0 +1,57 @@
+@startuml
+!theme plain
+
+entity "users" {
+    * id : BIGINT <<PK>>
+    --
+    * email : VARCHAR(255)
+    * username : VARCHAR(255)
+    * password : VARCHAR(255)
+    * created_at : DATETIME
+    * updated_at : DATETIME
+}
+
+entity "topics" {
+    * id : BIGINT <<PK>>
+    --
+    * name : VARCHAR(255)
+    * description : TEXT
+    * created_at : DATETIME
+}
+
+entity "posts" {
+    * id : BIGINT <<PK>>
+    --
+    * title : VARCHAR(255)
+    * content : TEXT
+    * created_at : DATETIME
+    * updated_at : DATETIME
+    user_id : BIGINT <<FK>>
+    topic_id : BIGINT <<FK>>
+}
+
+entity "comments" {
+    * id : BIGINT <<PK>>
+    --
+    * content : TEXT
+    * created_at : TIMESTAMP
+    user_id : BIGINT <<FK>>
+    post_id : BIGINT <<FK>>
+}
+
+entity "subscriptions" {
+    * id : BIGINT <<PK>>
+    --
+    * created_at : TIMESTAMP
+    user_id : BIGINT <<FK>>
+    topic_id : BIGINT <<FK>>
+}
+
+users ||--o{ posts
+users ||--o{ comments
+users ||--o{ subscriptions
+topics ||--o{ posts
+topics ||--o{ subscriptions
+posts ||--o{ comments
+
+@enduml

@@ -7,6 +7,10 @@
   <h1>Inscription</h1>
 </div>
 <div class="signin-container">
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
   <form (ngSubmit)="submit()" [formGroup]="form" class="signin-form" novalidate>
     <div class="form-group">
       <label for="username" class="form-label">Nom utilisateur</label>
@@ -33,7 +37,14 @@
         <mat-error
           *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
         >
-          Email valide requis
+          <span
+            *ngIf="
+              form.get('email')?.hasError('email') ||
+              form.get('email')?.hasError('strictEmail')
+            "
+          >
+            Format d'email invalide
+          </span>
         </mat-error>
       </mat-form-field>
     </div>
@@ -45,7 +56,16 @@
         <mat-error
           *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
         >
-          Mot de passe requis
+          <span *ngIf="form.get('password')?.hasError('required')"
+            >Mot de passe requis</span
+          >
+          <span *ngIf="form.get('password')?.hasError('minlength')"
+            >Au moins 8 caractères</span
+          >
+          <span *ngIf="form.get('password')?.hasError('strongPassword')">
+            Le mot de passe doit contenir : un chiffre, une minuscule, une
+            majuscule et un caractère spécial
+          </span>
         </mat-error>
       </mat-form-field>
     </div>

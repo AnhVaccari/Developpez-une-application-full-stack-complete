@@ -79,6 +79,25 @@
   cursor: pointer;
 }
 
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffebee;
+  border: 1px solid #ef5350;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  color: #c62828;
+  font-size: 14px;
+}
+
+.error-message mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
 /* Responsive mobile */
 @media (max-width: 768px) {
   app-navbar {
